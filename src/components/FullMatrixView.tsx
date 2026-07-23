@@ -154,7 +154,17 @@ export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
       </div>
 
       {/* Grid Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-[32px] border-4 border-blue-100 dark:border-slate-800 shadow-xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-[32px] border-4 border-blue-100 dark:border-slate-800 shadow-xl overflow-hidden space-y-2">
+        {/* Mobile Swipe Notice */}
+        <div className="bg-sky-100 dark:bg-slate-800 text-blue-950 dark:text-blue-200 text-xs font-black px-4 py-2 border-b-2 border-blue-200 dark:border-slate-700 flex items-center justify-between">
+          <span className="flex items-center gap-1.5 uppercase">
+            <span>👈</span> Geser tabel ke kanan / kiri untuk melihat semua kelas (1A - 6B) <span>👉</span>
+          </span>
+          <span className="text-[10px] bg-yellow-400 text-blue-950 px-2 py-0.5 rounded-full font-black border border-yellow-300 uppercase shadow-sm">
+            ANDROID / MOBILE SCROLL
+          </span>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-center text-xs border-collapse min-w-[900px]">
             <thead>
