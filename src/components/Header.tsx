@@ -134,8 +134,8 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Role Switcher Bar (Sisi Murid, Sisi Orang Tua, Sisi Sekolah/Guru) */}
       <div className="bg-blue-900/90 py-1.5 px-2 sm:px-3 border-b-2 border-yellow-400">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5">
-          <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto w-full scrollbar-none py-0.5">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1.5">
+          <div className="grid grid-cols-3 sm:flex sm:items-center gap-1 sm:gap-2 w-full">
             <span className="text-[10px] font-black uppercase text-yellow-300 bg-blue-950 px-2 py-1 rounded-lg border border-blue-800 shrink-0 hidden md:inline">
               MODE AKSEBILITAS:
             </span>
@@ -143,35 +143,35 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Role 1: Sisi Murid */}
             <button
               onClick={() => handleRoleClick('student')}
-              className={`flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+              className={`flex items-center justify-center gap-1 px-1.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase transition-all text-center ${
                 userRole === 'student'
-                  ? 'bg-yellow-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-300 scale-[1.02]'
+                  ? 'bg-yellow-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-300'
                   : 'bg-blue-800 hover:bg-blue-700 text-blue-100 border border-blue-700'
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5 text-amber-900 shrink-0" />
-              <span>MURID</span>
+              <span className="truncate">MURID</span>
             </button>
 
             {/* Role 2: Sisi Orang Tua */}
             <button
               onClick={() => handleRoleClick('parent')}
-              className={`flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+              className={`flex items-center justify-center gap-1 px-1.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase transition-all text-center ${
                 userRole === 'parent'
-                  ? 'bg-emerald-400 text-blue-950 shadow-[2px_2px_0px_#14532d] border-2 border-emerald-300 scale-[1.02]'
+                  ? 'bg-emerald-400 text-blue-950 shadow-[2px_2px_0px_#14532d] border-2 border-emerald-300'
                   : 'bg-blue-800 hover:bg-blue-700 text-blue-100 border border-blue-700'
               }`}
             >
               <Users className="w-3.5 h-3.5 text-emerald-950 shrink-0" />
-              <span>ORANG TUA</span>
+              <span className="truncate">ORANG TUA</span>
             </button>
 
             {/* Role 3: Sisi Sekolah / Guru */}
             <button
               onClick={() => handleRoleClick('teacher')}
-              className={`flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+              className={`flex items-center justify-center gap-1 px-1.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase transition-all text-center ${
                 userRole === 'teacher'
-                  ? 'bg-amber-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-500 scale-[1.02]'
+                  ? 'bg-amber-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-500'
                   : 'bg-blue-800 hover:bg-blue-700 text-yellow-300 border border-blue-700'
               }`}
             >
@@ -180,25 +180,27 @@ export const Header: React.FC<HeaderProps> = ({
               ) : (
                 <Lock className="w-3.5 h-3.5 text-amber-300 shrink-0" />
               )}
-              <span>GURU & SEKOLAH</span>
+              <span className="truncate">GURU</span>
               {isTeacherAuthenticated && (
-                <span className="bg-green-700 text-white text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded-full font-black">
-                  PIN OK
+                <span className="bg-green-700 text-white text-[8px] sm:text-[9px] px-1 py-0.2 rounded-full font-black shrink-0 hidden sm:inline">
+                  OK
                 </span>
               )}
             </button>
+          </div>
 
-            {/* Teacher Logout button if authenticated */}
-            {isTeacherAuthenticated && (
+          {/* Teacher Logout button if authenticated */}
+          {isTeacherAuthenticated && (
+            <div className="flex items-center justify-end w-full sm:w-auto mt-0.5 sm:mt-0">
               <button
                 onClick={onLogoutTeacher}
-                className="shrink-0 text-[10px] sm:text-[11px] font-black bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-xl border border-rose-400 uppercase transition-all shadow-sm"
+                className="w-full sm:w-auto text-[10px] sm:text-[11px] font-black bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-xl border border-rose-400 uppercase transition-all shadow-sm text-center"
                 title="Kunci Akses Guru"
               >
-                KUNCI MODE GURU
+                🔒 KUNCI MODE GURU
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -431,68 +433,72 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Dedicated Teacher Control Toolbar (Always visible in Teacher Mode without truncation) */}
+      {/* Dedicated Teacher Control Toolbar (Responsive & Grid on Mobile) */}
       {userRole === 'teacher' && (
-        <div className="bg-amber-950/95 text-amber-100 border-t-2 border-b-2 border-amber-400 px-2 sm:px-4 py-1.5">
-          <div className="max-w-7xl mx-auto flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
-            <span className="text-[10px] font-black uppercase bg-amber-400 text-blue-950 px-2 py-1 rounded-xl flex items-center gap-1 shadow-sm shrink-0 whitespace-nowrap">
-              <Sparkles className="w-3 h-3 text-amber-900 shrink-0" />
-              MENU GURU:
-            </span>
+        <div className="bg-amber-950/95 text-amber-100 border-t-2 border-b-2 border-amber-400 px-2 sm:px-4 py-2">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-stretch md:items-center gap-2">
+            <div className="flex items-center justify-between gap-1.5 shrink-0">
+              <span className="text-[10px] font-black uppercase bg-amber-400 text-blue-950 px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-sm shrink-0 whitespace-nowrap">
+                <Sparkles className="w-3.5 h-3.5 text-amber-900 shrink-0" />
+                MENU AKSES GURU:
+              </span>
+            </div>
 
-            <button
-              onClick={() => handleTabClick('students')}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
-                activeTab === 'students'
-                  ? 'bg-amber-400 text-blue-950 border-2 border-amber-300 shadow-sm scale-[1.02]'
-                  : 'bg-amber-900/60 hover:bg-amber-800 text-amber-200 border border-amber-500/50'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-              <span>KELOLA MURID</span>
-            </button>
-
-            <button
-              onClick={() => handleTabClick('teacher_reports')}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
-                activeTab === 'teacher_reports'
-                  ? 'bg-amber-400 text-blue-950 border-2 border-amber-300 shadow-sm scale-[1.02]'
-                  : 'bg-amber-900/60 hover:bg-amber-800 text-amber-200 border border-amber-500/50'
-              }`}
-            >
-              <Award className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-              <span>INPUT PRESTASI</span>
-            </button>
-
-            <button
-              onClick={() => handleTabClick('manage')}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
-                activeTab === 'manage'
-                  ? 'bg-amber-400 text-blue-950 border-2 border-amber-300 shadow-sm scale-[1.02]'
-                  : 'bg-amber-900/60 hover:bg-amber-800 text-amber-200 border border-amber-500/50'
-              }`}
-            >
-              <Edit3 className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-              <span>KELOLA ROSTER</span>
-            </button>
-
-            <button
-              onClick={() => onOpenGoogleSheetsModal()}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] sm:text-xs font-black uppercase bg-green-600 hover:bg-green-500 text-white border border-green-300 transition-all whitespace-nowrap shrink-0 shadow-sm"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-green-200 shrink-0" />
-              <span>GOOGLE SHEETS</span>
-            </button>
-
-            {onOpenPrintRoster && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:items-center gap-1.5 sm:gap-2 w-full">
               <button
-                onClick={() => onOpenPrintRoster()}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] sm:text-xs font-black uppercase bg-purple-600 hover:bg-purple-500 text-white border border-purple-300 transition-all whitespace-nowrap shrink-0 shadow-sm"
+                onClick={() => handleTabClick('students')}
+                className={`flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all ${
+                  activeTab === 'students'
+                    ? 'bg-amber-400 text-blue-950 border-2 border-amber-300 shadow-sm scale-[1.02]'
+                    : 'bg-amber-900/70 hover:bg-amber-800 text-amber-200 border border-amber-500/50'
+                }`}
               >
-                <Printer className="w-3.5 h-3.5 text-purple-200 shrink-0" />
-                <span>CETAK ROSTER</span>
+                <Users className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                <span>KELOLA MURID</span>
               </button>
-            )}
+
+              <button
+                onClick={() => handleTabClick('teacher_reports')}
+                className={`flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all ${
+                  activeTab === 'teacher_reports'
+                    ? 'bg-amber-400 text-blue-950 border-2 border-amber-300 shadow-sm scale-[1.02]'
+                    : 'bg-amber-900/70 hover:bg-amber-800 text-amber-200 border border-amber-500/50'
+                }`}
+              >
+                <Award className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                <span>INPUT PRESTASI</span>
+              </button>
+
+              <button
+                onClick={() => handleTabClick('manage')}
+                className={`flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase transition-all ${
+                  activeTab === 'manage'
+                    ? 'bg-amber-400 text-blue-950 border-2 border-amber-300 shadow-sm scale-[1.02]'
+                    : 'bg-amber-900/70 hover:bg-amber-800 text-amber-200 border border-amber-500/50'
+                }`}
+              >
+                <Edit3 className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                <span>KELOLA ROSTER</span>
+              </button>
+
+              <button
+                onClick={() => onOpenGoogleSheetsModal()}
+                className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase bg-green-600 hover:bg-green-500 text-white border border-green-300 transition-all shadow-sm"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-green-200 shrink-0" />
+                <span>GOOGLE SHEETS</span>
+              </button>
+
+              {onOpenPrintRoster && (
+                <button
+                  onClick={() => onOpenPrintRoster()}
+                  className="col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-black uppercase bg-purple-600 hover:bg-purple-500 text-white border border-purple-300 transition-all shadow-sm"
+                >
+                  <Printer className="w-3.5 h-3.5 text-purple-200 shrink-0" />
+                  <span>CETAK ROSTER</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
