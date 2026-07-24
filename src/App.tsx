@@ -641,6 +641,7 @@ export default function App() {
               currentDay={currentDay}
               onSelectClass={setSelectedClass}
               onEditItem={handleOpenEdit}
+              onOpenPrintRoster={() => setIsPrintRosterModalOpen(true)}
             />
           )}
 

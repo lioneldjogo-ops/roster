@@ -8,6 +8,7 @@ interface FullMatrixViewProps {
   currentDay: DayOfWeek | null;
   onSelectClass: (c: ClassGroup) => void;
   onEditItem: (item: ScheduleItem) => void;
+  onOpenPrintRoster?: () => void;
 }
 
 export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
@@ -15,6 +16,7 @@ export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
   currentDay,
   onSelectClass,
   onEditItem,
+  onOpenPrintRoster,
 }) => {
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(currentDay || 'Senin');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -43,7 +45,11 @@ export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
   };
 
   const handlePrint = () => {
-    window.print();
+    if (onOpenPrintRoster) {
+      onOpenPrintRoster();
+    } else {
+      window.print();
+    }
   };
 
   return (

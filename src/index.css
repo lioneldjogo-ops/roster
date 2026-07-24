@@ -1,46 +1,97 @@
 @import "tailwindcss";
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 5mm 8mm;
+  }
+
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    box-shadow: none !important;
   }
 
-  /* Hide non-printable UI elements */
-  header, 
-  nav, 
-  button, 
-  .print\:hidden {
-    display: none !important;
-  }
-
-  body {
+  /* Hide the web application background layout, header, main content, and navigation when printing */
+  html, body {
     background: #ffffff !important;
     color: #000000 !important;
-  }
-
-  /* Reset modal containers for print */
-  .fixed {
-    position: relative !important;
-    inset: auto !important;
-    background: transparent !important;
+    margin: 0 !important;
     padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
     overflow: visible !important;
   }
 
-  #printable-roster-area {
-    border: none !important;
+  /* Hide header, main app view, footer, buttons, inputs, dropdowns */
+  #root > header,
+  #root > main,
+  #root > footer,
+  .print\:hidden,
+  button,
+  input,
+  select,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset fixed modal overlay containers for clean printing */
+  .fixed {
+    position: static !important;
+    inset: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: visible !important;
     width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .fixed > div {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+  }
+
+  /* Format #printable-roster-area as the exclusive printed document */
+  #printable-roster-area {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+    border: 3px solid #1e293b !important;
+    border-radius: 20px !important;
+    background: #ffffff !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  #printable-roster-area * {
+    visibility: visible !important;
   }
 
   table {
     page-break-inside: auto;
+    width: 100% !important;
+    border-collapse: collapse !important;
   }
 
   tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  td, th {
+    padding: 4px 6px !important;
   }
 }
+
