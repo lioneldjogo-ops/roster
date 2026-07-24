@@ -6,6 +6,7 @@ import {
   Languages, Palette, Shield, Sparkles, Trophy, Flag, Clock, Plus, 
   Edit, Trash2, CheckCircle, AlertCircle, Info, Printer
 } from 'lucide-react';
+import { SubjectGearChecklist } from './SubjectGearChecklist';
 
 interface ClassScheduleViewProps {
   selectedClass: ClassGroup;
@@ -308,6 +309,9 @@ export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
           );
         })}
       </div>
+
+      {/* Checklist Perlengkapan & Informasi Mata Pelajaran Murid (dengan Tombol Tambah, Edit, dan Hapus) */}
+      <SubjectGearChecklist isTeacher={isTeacher} selectedClass={selectedClass} />
     </div>
   );
 };

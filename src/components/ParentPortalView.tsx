@@ -31,6 +31,7 @@ import {
 import sdKidsKelas1Img from '../assets/images/sd_kids_kelas1_1784863874884.jpg';
 import sdKidsKelas3Img from '../assets/images/sd_kids_kelas3_1784863892434.jpg';
 import sdKidsKelas5Img from '../assets/images/sd_kids_kelas5_1784863903182.jpg';
+import { SubjectGearChecklist } from './SubjectGearChecklist';
 
 interface ParentPortalViewProps {
   selectedClass: ClassGroup;
@@ -799,6 +800,9 @@ export const ParentPortalView: React.FC<ParentPortalViewProps> = ({
           </div>
         )}
       </div>
+
+      {/* Checklist Informasi & Buku Perlengkapan Mata Pelajaran */}
+      <SubjectGearChecklist isTeacher={false} selectedClass={selectedClass} />
     </div>
   );
 };
