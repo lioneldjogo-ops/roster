@@ -570,6 +570,7 @@ export default function App() {
               onDeleteItem={handleDeleteScheduleItem}
               onAddNewItem={(c, d) => handleOpenAddNew(c, d)}
               onOpenPrintRoster={() => setIsPrintRosterModalOpen(true)}
+              isTeacher={userRole === 'teacher'}
             />
           )}
 
@@ -642,6 +643,7 @@ export default function App() {
               onSelectClass={setSelectedClass}
               onEditItem={handleOpenEdit}
               onOpenPrintRoster={() => setIsPrintRosterModalOpen(true)}
+              isTeacher={userRole === 'teacher'}
             />
           )}
 
@@ -661,6 +663,7 @@ export default function App() {
               onSaveClassRoster={handleSaveClassRoster}
               onDeleteStudent={handleDeleteStudent}
               onToggleStudentHomework={handleToggleStudentHomework}
+              isTeacher={userRole === 'teacher'}
             />
           )}
 
@@ -672,6 +675,7 @@ export default function App() {
               onAddQuestion={handleAddQuizQuestion}
               onDeleteQuestion={handleDeleteQuizQuestion}
               onOpenGoogleSheetsModal={() => setIsGoogleSheetsModalOpen(true)}
+              isTeacher={userRole === 'teacher'}
             />
           )}
 

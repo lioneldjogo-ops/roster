@@ -15,6 +15,7 @@ interface ClassScheduleViewProps {
   onDeleteItem: (itemId: string) => void;
   onAddNewItem: (classGroup: ClassGroup, day: DayOfWeek) => void;
   onOpenPrintRoster?: () => void;
+  isTeacher?: boolean;
 }
 
 export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
@@ -25,6 +26,7 @@ export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
   onDeleteItem,
   onAddNewItem,
   onOpenPrintRoster,
+  isTeacher = false,
 }) => {
   const [activeDayFilter, setActiveDayFilter] = useState<DayOfWeek | 'ALL'>(
     currentDay || 'Senin'
@@ -209,7 +211,7 @@ export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
                           </span>
 
                           {/* Quick action overlay */}
-                          {scheduleItem && !isBreak && (
+                          {isTeacher && scheduleItem && !isBreak && (
                             <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
                               <button
                                 onClick={() => onEditItem(scheduleItem)}
@@ -287,12 +289,14 @@ export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
                         ) : (
                           <div className="py-6 text-center">
                             <p className="text-xs font-bold text-slate-400 italic">Kosong / Libur</p>
-                            <button
-                              onClick={() => onAddNewItem(selectedClass, day)}
-                              className="mt-2 text-[11px] bg-blue-50 text-blue-700 font-black px-3 py-1 rounded-xl border border-blue-200 hover:bg-blue-100 transition-colors"
-                            >
-                              + TAMBAH
-                            </button>
+                            {isTeacher && (
+                              <button
+                                onClick={() => onAddNewItem(selectedClass, day)}
+                                className="mt-2 text-[11px] bg-blue-50 text-blue-700 font-black px-3 py-1 rounded-xl border border-blue-200 hover:bg-blue-100 transition-colors"
+                              >
+                                + TAMBAH
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>

@@ -37,6 +37,7 @@ interface HomeworkPanelProps {
   onSaveClassRoster: (classGroup: ClassGroup, newStudents: Student[]) => void;
   onDeleteStudent: (studentId: string) => void;
   onToggleStudentHomework: (homeworkId: string, studentId: string, studentName: string) => void;
+  isTeacher?: boolean;
 }
 
 export const HomeworkPanel: React.FC<HomeworkPanelProps> = ({
@@ -54,6 +55,7 @@ export const HomeworkPanel: React.FC<HomeworkPanelProps> = ({
   onSaveClassRoster,
   onDeleteStudent,
   onToggleStudentHomework,
+  isTeacher = false,
 }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
@@ -272,29 +274,38 @@ export const HomeworkPanel: React.FC<HomeworkPanelProps> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-xs px-5 py-3 rounded-2xl border-2 border-yellow-300 shadow-[4px_4px_0px_#1e3a8a] active:translate-y-0.5 active:shadow-none transition-all uppercase"
-          >
-            <Plus className="w-4 h-4 text-blue-950" />
-            <span>TAMBAH PR BARU +</span>
-          </button>
+          {isTeacher ? (
+            <>
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-xs px-5 py-3 rounded-2xl border-2 border-yellow-300 shadow-[4px_4px_0px_#1e3a8a] active:translate-y-0.5 active:shadow-none transition-all uppercase"
+              >
+                <Plus className="w-4 h-4 text-blue-950" />
+                <span>TAMBAH PR BARU +</span>
+              </button>
 
-          <button
-            onClick={handleOpenRosterModal}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-blue-950 font-black text-xs px-5 py-3 rounded-2xl border-2 border-amber-300 shadow-[4px_4px_0px_#78350f] active:translate-y-0.5 active:shadow-none transition-all uppercase"
-          >
-            <UserPlus className="w-4 h-4 text-blue-950" />
-            <span>INPUT WALI KELAS, MAPEL & SISWA +</span>
-          </button>
+              <button
+                onClick={handleOpenRosterModal}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-blue-950 font-black text-xs px-5 py-3 rounded-2xl border-2 border-amber-300 shadow-[4px_4px_0px_#78350f] active:translate-y-0.5 active:shadow-none transition-all uppercase"
+              >
+                <UserPlus className="w-4 h-4 text-blue-950" />
+                <span>INPUT WALI KELAS, MAPEL & SISWA +</span>
+              </button>
 
-          <button
-            onClick={onOpenGoogleSheetsModal}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-black text-xs px-5 py-3 rounded-2xl border-2 border-green-300 shadow-[4px_4px_0px_#14532d] active:translate-y-0.5 active:shadow-none transition-all uppercase"
-          >
-            <FileSpreadsheet className="w-4 h-4 text-white" />
-            <span>SINKRON SHEETS</span>
-          </button>
+              <button
+                onClick={onOpenGoogleSheetsModal}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-black text-xs px-5 py-3 rounded-2xl border-2 border-green-300 shadow-[4px_4px_0px_#14532d] active:translate-y-0.5 active:shadow-none transition-all uppercase"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-white" />
+                <span>SINKRON SHEETS</span>
+              </button>
+            </>
+          ) : (
+            <div className="bg-yellow-400 text-blue-950 font-black text-xs px-4 py-3 rounded-2xl border-2 border-yellow-300 shadow-md flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-blue-950 shrink-0" />
+              <span>Mode Murid & Orang Tua: Kerjakan PR di buku tulis, lalu tandai namamu di bawah setelah selesai!</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -344,12 +355,14 @@ export const HomeworkPanel: React.FC<HomeworkPanelProps> = ({
                 </p>
               </div>
 
-              <button
-                onClick={handleOpenRosterModal}
-                className="text-xs font-black bg-amber-400 hover:bg-amber-300 text-blue-950 px-3.5 py-1.5 rounded-xl border border-amber-500 uppercase flex items-center gap-1.5 shadow-sm"
-              >
-                <UserPlus className="w-4 h-4" /> ATUR GURU & TABEL SISWA
-              </button>
+              {isTeacher && (
+                <button
+                  onClick={handleOpenRosterModal}
+                  className="text-xs font-black bg-amber-400 hover:bg-amber-300 text-blue-950 px-3.5 py-1.5 rounded-xl border border-amber-500 uppercase flex items-center gap-1.5 shadow-sm"
+                >
+                  <UserPlus className="w-4 h-4" /> ATUR GURU & TABEL SISWA
+                </button>
+              )}
             </div>
 
             {classStudents.length === 0 ? (
@@ -372,17 +385,19 @@ export const HomeworkPanel: React.FC<HomeworkPanelProps> = ({
                         NIM: {std.nim}
                       </span>
                     )}
-                    <button
-                      onClick={() => {
-                        if (confirm(`Hapus murid ${std.name} dari Kelas ${selectedClass}?`)) {
-                          onDeleteStudent(std.id);
-                        }
-                      }}
-                      className="text-slate-400 hover:text-rose-600 ml-1 p-0.5"
-                      title="Hapus Murid"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    {isTeacher && (
+                      <button
+                        onClick={() => {
+                          if (confirm(`Hapus murid ${std.name} dari Kelas ${selectedClass}?`)) {
+                            onDeleteStudent(std.id);
+                          }
+                        }}
+                        className="text-slate-400 hover:text-rose-600 ml-1 p-0.5"
+                        title="Hapus Murid"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -437,20 +452,22 @@ export const HomeworkPanel: React.FC<HomeworkPanelProps> = ({
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => {
-                        if (confirm('Hapus instruksi PR ini?')) {
-                          onDeleteHomework(hw.id);
-                        }
-                      }}
-                      className="flex items-center gap-1 text-xs font-black text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 px-3 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900 transition-colors"
-                      title="Hapus Instruksi PR"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      <span>Hapus</span>
-                    </button>
-                  </div>
+                  {isTeacher && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          if (confirm('Hapus instruksi PR ini?')) {
+                            onDeleteHomework(hw.id);
+                          }
+                        }}
+                        className="flex items-center gap-1 text-xs font-black text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 px-3 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900 transition-colors"
+                        title="Hapus Instruksi PR"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Homework Title & Description */}

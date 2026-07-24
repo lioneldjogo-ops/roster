@@ -9,6 +9,7 @@ interface FullMatrixViewProps {
   onSelectClass: (c: ClassGroup) => void;
   onEditItem: (item: ScheduleItem) => void;
   onOpenPrintRoster?: () => void;
+  isTeacher?: boolean;
 }
 
 export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
@@ -17,6 +18,7 @@ export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
   onSelectClass,
   onEditItem,
   onOpenPrintRoster,
+  isTeacher = false,
 }) => {
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(currentDay || 'Senin');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -224,7 +226,11 @@ export const FullMatrixView: React.FC<FullMatrixViewProps> = ({
                         <td
                           key={cls}
                           onClick={() => {
-                            if (item) onEditItem(item);
+                            if (isTeacher && item) {
+                              onEditItem(item);
+                            } else {
+                              onSelectClass(cls);
+                            }
                           }}
                           className={`py-2 px-1 border-r-2 border-slate-100 dark:border-slate-800 font-black cursor-pointer transition-all hover:scale-[1.05] ${
                             highlighted

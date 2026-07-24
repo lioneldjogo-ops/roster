@@ -24,6 +24,7 @@ interface TeacherQuizGameProps {
   onAddQuestion: (q: Omit<QuizQuestion, 'id'>) => void;
   onDeleteQuestion: (id: string) => void;
   onOpenGoogleSheetsModal: () => void;
+  isTeacher?: boolean;
 }
 
 export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
@@ -33,6 +34,7 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
   onAddQuestion,
   onDeleteQuestion,
   onOpenGoogleSheetsModal,
+  isTeacher = false,
 }) => {
   const [activeTab, setActiveTab] = useState<'play' | 'teacher'>('play');
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>('ALL');
@@ -142,13 +144,15 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
 
         {/* Tab Selector & Sheets Action */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-xs rounded-2xl border-2 border-yellow-300 shadow-[3px_3px_0px_#1e3a8a] active:translate-y-0.5 uppercase flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4 text-blue-950" />
-            <span>+ TAMBAH SOAL KUIS</span>
-          </button>
+          {isTeacher && (
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-xs rounded-2xl border-2 border-yellow-300 shadow-[3px_3px_0px_#1e3a8a] active:translate-y-0.5 uppercase flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4 text-blue-950" />
+              <span>+ TAMBAH SOAL KUIS</span>
+            </button>
+          )}
 
           <button
             onClick={() => setActiveTab('play')}
@@ -161,25 +165,29 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
             <Gamepad2 className="w-4 h-4" /> 1. MAIN KUIS
           </button>
 
-          <button
-            onClick={() => setActiveTab('teacher')}
-            className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase transition-all flex items-center gap-2 ${
-              activeTab === 'teacher'
-                ? 'bg-blue-950 text-yellow-300 border-2 border-yellow-400 shadow-[3px_3px_0px_#1e3a8a]'
-                : 'bg-white/80 text-blue-950 hover:bg-white'
-            }`}
-          >
-            <Plus className="w-4 h-4" /> 2. KELOLA BANK SOAL ({quizList.filter((q) => q.classGroup === selectedClass).length})
-          </button>
+          {isTeacher && (
+            <>
+              <button
+                onClick={() => setActiveTab('teacher')}
+                className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase transition-all flex items-center gap-2 ${
+                  activeTab === 'teacher'
+                    ? 'bg-blue-950 text-yellow-300 border-2 border-yellow-400 shadow-[3px_3px_0px_#1e3a8a]'
+                    : 'bg-white/80 text-blue-950 hover:bg-white'
+                }`}
+              >
+                <Plus className="w-4 h-4" /> 2. KELOLA BANK SOAL ({quizList.filter((q) => q.classGroup === selectedClass).length})
+              </button>
 
-          <button
-            onClick={onOpenGoogleSheetsModal}
-            className="p-2.5 bg-green-700 hover:bg-green-600 text-white rounded-2xl border-2 border-green-300 shadow-[3px_3px_0px_#14532d] flex items-center gap-1.5 text-xs font-black uppercase"
-            title="Sinkronkan dengan Google Sheets"
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span className="hidden sm:inline">GOOGLE SHEETS</span>
-          </button>
+              <button
+                onClick={onOpenGoogleSheetsModal}
+                className="p-2.5 bg-green-700 hover:bg-green-600 text-white rounded-2xl border-2 border-green-300 shadow-[3px_3px_0px_#14532d] flex items-center gap-1.5 text-xs font-black uppercase"
+                title="Sinkronkan dengan Google Sheets"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                <span className="hidden sm:inline">GOOGLE SHEETS</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
