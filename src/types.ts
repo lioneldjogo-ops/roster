@@ -113,6 +113,7 @@ export interface QuizQuestion {
   correctAnswerIndex: number; // 0, 1, 2, 3
   explanation: string;
   teacherName: string;
+  imageUrl?: string; // Optional illustration image for question
 }
 
 export type UserRole = 'student' | 'parent' | 'teacher';

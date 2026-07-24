@@ -73,7 +73,7 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['7', '8', '9', '10'],
     correctAnswerIndex: 2, // 9
     explanation: '5 ditambah 4 sama dengan 9.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Ibu Maria S.Pd',
   },
   {
     id: 'q-math-2',
@@ -83,7 +83,17 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['6 apel', '8 apel', '9 apel', '10 apel'],
     correctAnswerIndex: 1, // 8
     explanation: '12 - 4 = 8 apel.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Bapak Yos S.Pd',
+  },
+  {
+    id: 'q-math-3',
+    classGroup: '1A',
+    subjectCode: 'MATEMATIKA',
+    question: 'Bangun datar yang memiliki 3 buah sisi dan 3 buah sudut adalah...',
+    options: ['Persegi', 'Segitiga', 'Lingkaran', 'Persegi Panjang'],
+    correctAnswerIndex: 1, // Segitiga
+    explanation: 'Segitiga memiliki 3 sudut dan 3 sisi yang saling terhubung.',
+    teacherName: 'Ibu Maria S.Pd',
   },
 
   // B. INDONESIA
@@ -95,7 +105,17 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['Hei', 'Selamat Pagi, Ibu Guru', 'Kamu siapa', 'Woi'],
     correctAnswerIndex: 1,
     explanation: '"Selamat Pagi, Ibu Guru" adalah kata sapaan yang sopan dan santun.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Ibu Katharina S.Pd',
+  },
+  {
+    id: 'q-indo-2',
+    classGroup: '1A',
+    subjectCode: 'B.INDONESIA',
+    question: 'Huruf vokal dalam alfabet terdiri dari...',
+    options: ['A, E, I, O, U', 'B, C, D, F, G', 'X, Y, Z', '1, 2, 3, 4, 5'],
+    correctAnswerIndex: 0,
+    explanation: 'Huruf vokal (huruf hidup) adalah A, E, I, O, U.',
+    teacherName: 'Ibu Katharina S.Pd',
   },
 
   // IPAS
@@ -107,7 +127,17 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['Daun', 'Akar', 'Bunga', 'Batang'],
     correctAnswerIndex: 1, // Akar
     explanation: 'Akar berada di bawah tanah dan bertugas menyerap air serta mineral tanah.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Ibu Elisabeth S.Pd',
+  },
+  {
+    id: 'q-ipas-2',
+    classGroup: '1A',
+    subjectCode: 'IPAS',
+    question: 'Hewan yang hidup di air dan bernapas menggunakan insang adalah...',
+    options: ['Kucing', 'Ikan', 'Burung', 'Ayam'],
+    correctAnswerIndex: 1, // Ikan
+    explanation: 'Ikan hidup di air dan bernapas menggunakan organ khusus bernama insang.',
+    teacherName: 'Ibu Elisabeth S.Pd',
   },
 
   // AGAMA
@@ -119,7 +149,17 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['Bercanda dengan teman', 'Tenang, khusyuk, dan melipat tangan', 'Berlari-lari', 'Tidur'],
     correctAnswerIndex: 1,
     explanation: 'Saat berdoa kita harus berbicara dengan Tuhan dengan sikap hormat dan khusyuk.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Pater Gregorius Pr',
+  },
+  {
+    id: 'q-agama-2',
+    classGroup: '1A',
+    subjectCode: 'AGAMA',
+    question: 'Siapakah nama Ibunda Yesus Kristus?',
+    options: ['Bunda Maria', 'Ibu Marta', 'Ibu Elisabeth', 'Ibu Anna'],
+    correctAnswerIndex: 0,
+    explanation: 'Bunda Maria adalah ibu suci dari Yesus Kristus.',
+    teacherName: 'Pater Gregorius Pr',
   },
 
   // PJOK
@@ -131,7 +171,7 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['Makan kenyang', 'Pemanasan', 'Pendinginan langsung', 'Tidur terlentang'],
     correctAnswerIndex: 1, // Pemanasan
     explanation: 'Pemanasan berguna mencegah cedera dan menyiapkan otot sebelum berolahraga.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Bapak Stefanus S.Pd',
   },
 
   // PENDIDIKAN PANCASILA
@@ -143,7 +183,17 @@ export const DEFAULT_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['Rantai Emas', 'Pohon Beringin', 'Bintang Emas', 'Kepala Banteng'],
     correctAnswerIndex: 2, // Bintang
     explanation: 'Bintang Emas berlatar belakang hitam adalah lambang Sila ke-1 Pancasila.',
-    teacherName: 'Guru Mata Pelajaran',
+    teacherName: 'Ibu Paulina S.Pd',
+  },
+  {
+    id: 'q-pancasila-2',
+    classGroup: '1A',
+    subjectCode: 'PENDIDIKAN PANCASILA',
+    question: 'Apa warna bendera kebangsaan Negara Indonesia?',
+    options: ['Merah dan Putih', 'Hijau dan Kuning', 'Biru dan Putih', 'Hitam dan Merah'],
+    correctAnswerIndex: 0,
+    explanation: 'Bendera Sang Saka Merah Putih adalah bendera resmi Negara Kesatuan Republik Indonesia.',
+    teacherName: 'Ibu Paulina S.Pd',
   },
 ];
 
