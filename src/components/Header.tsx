@@ -24,7 +24,8 @@ import {
   GraduationCap,
   Award,
   Heart,
-  Printer
+  Printer,
+  BarChart3
 } from 'lucide-react';
 import schoolLogo from '../assets/images/school_logo_st_teresia_1784846232480.jpg';
 
@@ -59,6 +60,7 @@ interface HeaderProps {
   onOpenPinModal: () => void;
   onLogoutTeacher: () => void;
   onOpenPrintRoster?: () => void;
+  onOpenDevAnalytics?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -81,6 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPinModal,
   onLogoutTeacher,
   onOpenPrintRoster,
+  onOpenDevAnalytics,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -252,6 +255,18 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </select>
           </div>
+
+          {/* Developer Analytics Button (dvv.cacing) */}
+          {onOpenDevAnalytics && (
+            <button
+              onClick={onOpenDevAnalytics}
+              className="flex items-center gap-1.5 text-xs font-black bg-indigo-950 hover:bg-indigo-900 text-indigo-300 hover:text-white px-3 py-2 rounded-2xl border-2 border-indigo-700 transition-all shadow-[3px_3px_0px_#1e1b4b] active:translate-y-0.5"
+              title="Dashboard Analitik Kunjungan (PIN: dvv.cacing)"
+            >
+              <BarChart3 className="w-4 h-4 text-indigo-400" />
+              <span className="uppercase">DEV ANALYTICS</span>
+            </button>
+          )}
 
           {/* Cetak Roster Button */}
           {onOpenPrintRoster && (
@@ -510,6 +525,22 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="grid grid-cols-1 gap-2">
+            {onOpenDevAnalytics && (
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenDevAnalytics();
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all bg-indigo-950 hover:bg-indigo-900 text-indigo-300 border-2 border-indigo-700 shadow-[3px_3px_0px_#1e1b4b]"
+              >
+                <div className="flex items-center gap-2.5">
+                  <BarChart3 className="w-4 h-4 text-indigo-400" />
+                  <span>📊 DEVELOPER ANALYTICS (PIN: dvv.cacing)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 opacity-80" />
+              </button>
+            )}
+
             {onOpenPrintRoster && (
               <button
                 onClick={() => {

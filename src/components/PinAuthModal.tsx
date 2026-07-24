@@ -6,9 +6,15 @@ interface PinAuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  onDevAnalyticsSuccess?: () => void;
 }
 
-export const PinAuthModal: React.FC<PinAuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
+export const PinAuthModal: React.FC<PinAuthModalProps> = ({
+  isOpen,
+  onClose,
+  onSuccess,
+  onDevAnalyticsSuccess,
+}) => {
   const [pinInput, setPinInput] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [showHint, setShowHint] = useState(false);
@@ -23,8 +29,15 @@ export const PinAuthModal: React.FC<PinAuthModalProps> = ({ isOpen, onClose, onS
       setErrorMsg('');
       setPinInput('');
       onSuccess();
+    } else if (cleaned === 'dvv.cacing') {
+      setErrorMsg('');
+      setPinInput('');
+      onClose();
+      if (onDevAnalyticsSuccess) {
+        onDevAnalyticsSuccess();
+      }
     } else {
-      setErrorMsg('PIN yang Anda masukkan salah! Silakan coba lagi.');
+      setErrorMsg('PIN salah! Gunakan PIN Sekolah (st-theresia) atau PIN Dev (dvv.cacing).');
     }
   };
 

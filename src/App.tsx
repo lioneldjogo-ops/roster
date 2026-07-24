@@ -30,8 +30,10 @@ import { PinAuthModal } from './components/PinAuthModal';
 import { ParentPortalView } from './components/ParentPortalView';
 import { TeacherReportManager } from './components/TeacherReportManager';
 import { StudentManagementView } from './components/StudentManagementView';
+import { DeveloperAnalyticsModal } from './components/DeveloperAnalyticsModal';
 import { initAuth } from './lib/firebase';
-import { BellRing, Heart } from 'lucide-react';
+import { recordVisit } from './lib/analytics';
+import { BellRing, Heart, BarChart3 } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY_SCHEDULES = 'sdk_teresia_schedules_v1';
 const LOCAL_STORAGE_KEY_CLASS = 'sdk_teresia_selected_class';
@@ -89,6 +91,12 @@ export default function App() {
   });
 
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
+  const [isDevAnalyticsModalOpen, setIsDevAnalyticsModalOpen] = useState(false);
+
+  // Auto-record pagevisit for developer analytics
+  useEffect(() => {
+    recordVisit(userRole, activeTab, selectedClass);
+  }, [userRole, activeTab, selectedClass]);
 
   // 5. Achievements State
   const [achievements, setAchievements] = useState<StudentAchievement[]>(() => {
@@ -540,6 +548,7 @@ export default function App() {
           onOpenPinModal={() => setIsPinModalOpen(true)}
           onLogoutTeacher={handleLogoutTeacher}
           onOpenPrintRoster={() => setIsPrintRosterModalOpen(true)}
+          onOpenDevAnalytics={() => setIsDevAnalyticsModalOpen(true)}
         />
 
         {/* Active Class Ticker Bar */}
@@ -713,6 +722,16 @@ export default function App() {
         isOpen={isPinModalOpen}
         onClose={() => setIsPinModalOpen(false)}
         onSuccess={handleTeacherPinSuccess}
+        onDevAnalyticsSuccess={() => setIsDevAnalyticsModalOpen(true)}
+      />
+
+      {/* Developer Analytics Modal */}
+      <DeveloperAnalyticsModal
+        isOpen={isDevAnalyticsModalOpen}
+        onClose={() => setIsDevAnalyticsModalOpen(false)}
+        currentRole={userRole}
+        currentTab={activeTab}
+        currentClass={selectedClass}
       />
 
       {/* Edit Schedule Modal */}
@@ -770,9 +789,20 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-blue-900 text-yellow-300 px-4 py-2 rounded-full border-2 border-blue-950 text-xs font-black shadow-[2px_2px_0px_#1e3a8a]">
-            <span>Yayasan Amkur Flores (YAMKURES)</span>
-            <Heart className="w-4 h-4 text-red-400 fill-red-400 inline ml-1 animate-pulse" />
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setIsDevAnalyticsModalOpen(true)}
+              className="flex items-center gap-1.5 bg-indigo-950 hover:bg-indigo-900 text-indigo-300 font-black px-3.5 py-1.5 rounded-full border border-indigo-700 text-xs shadow-md transition-all hover:text-white"
+              title="Akses Dashboard Kunjungan Developer (PIN: dvv.cacing)"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Developer Analytics (PIN: dvv.cacing)</span>
+            </button>
+
+            <div className="flex items-center gap-2 bg-blue-900 text-yellow-300 px-4 py-2 rounded-full border-2 border-blue-950 text-xs font-black shadow-[2px_2px_0px_#1e3a8a]">
+              <span>Yayasan Amkur Flores (YAMKURES)</span>
+              <Heart className="w-4 h-4 text-red-400 fill-red-400 inline ml-1 animate-pulse" />
+            </div>
           </div>
         </div>
       </footer>

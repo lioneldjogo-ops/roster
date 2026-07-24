@@ -1,4 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 import {
   getAuth,
   signInWithPopup,
@@ -12,6 +13,7 @@ import firebaseConfig from '../../firebase-applet-config.json';
 // Reuse app instance if already initialized
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 const provider = new GoogleAuthProvider();
 // Request Google Sheets scope for reading and editing spreadsheets
