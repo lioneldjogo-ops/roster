@@ -462,6 +462,10 @@ export default function App() {
     setQuizList((prev) => prev.filter((q) => q.id !== id));
   };
 
+  const handleDeleteAllClassQuestions = (classGroup: ClassGroup) => {
+    setQuizList((prev) => prev.filter((q) => q.classGroup !== classGroup));
+  };
+
   // Schedule Handlers
   const handleSaveScheduleItem = (newItem: ScheduleItem) => {
     setSchedules((prev) => {
@@ -674,6 +678,7 @@ export default function App() {
               onSelectClass={setSelectedClass}
               onAddQuestion={handleAddQuizQuestion}
               onDeleteQuestion={handleDeleteQuizQuestion}
+              onDeleteAllClassQuestions={handleDeleteAllClassQuestions}
               onOpenGoogleSheetsModal={() => setIsGoogleSheetsModalOpen(true)}
               isTeacher={userRole === 'teacher'}
             />

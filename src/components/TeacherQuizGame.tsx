@@ -26,6 +26,7 @@ import {
   Unlock,
   Lock,
   RefreshCw,
+  Pencil,
 } from 'lucide-react';
 
 import mascotHappy from '../assets/images/quiz_mascot_happy_1784887213171.jpg';
@@ -70,6 +71,7 @@ interface TeacherQuizGameProps {
   onSelectClass: (c: ClassGroup) => void;
   onAddQuestion: (q: Omit<QuizQuestion, 'id'>) => void;
   onDeleteQuestion: (id: string) => void;
+  onDeleteAllClassQuestions?: (classGroup: ClassGroup) => void;
   onOpenGoogleSheetsModal: () => void;
   isTeacher?: boolean;
 }
@@ -161,6 +163,7 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
   onSelectClass,
   onAddQuestion,
   onDeleteQuestion,
+  onDeleteAllClassQuestions,
   onOpenGoogleSheetsModal,
   isTeacher = false,
 }) => {
@@ -186,8 +189,9 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
   const [timerSeconds, setTimerSeconds] = useState(30);
   const [isTimerActive, setIsTimerActive] = useState(false);
 
-  // Modal Teacher Add Question
+  // Modal Teacher Add/Edit Question
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
   const [newSubject, setNewSubject] = useState('MATEMATIKA');
   const [newQuestion, setNewQuestion] = useState('');
   const [optionA, setOptionA] = useState('');
@@ -303,9 +307,41 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
     setIsTimerActive(true);
   };
 
+  const handleOpenAddModal = () => {
+    setEditingQuestionId(null);
+    setNewQuestion('');
+    setOptionA('');
+    setOptionB('');
+    setOptionC('');
+    setOptionD('');
+    setExplanation('');
+    setImageUrl('');
+    setCorrectIndex(0);
+    setIsAddModalOpen(true);
+  };
+
+  const handleOpenEditModal = (q: QuizQuestion) => {
+    setEditingQuestionId(q.id);
+    setNewSubject(q.subjectCode);
+    setNewQuestion(q.question);
+    setOptionA(q.options[0] || '');
+    setOptionB(q.options[1] || '');
+    setOptionC(q.options[2] || '');
+    setOptionD(q.options[3] || '');
+    setCorrectIndex(q.correctAnswerIndex);
+    setExplanation(q.explanation || '');
+    setImageUrl(q.imageUrl || '');
+    setTeacherName(q.teacherName || 'Ibu Maria S.Pd');
+    setIsAddModalOpen(true);
+  };
+
   const handleAddQuestionSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newQuestion.trim() || !optionA.trim() || !optionB.trim()) return;
+
+    if (editingQuestionId) {
+      onDeleteQuestion(editingQuestionId);
+    }
 
     onAddQuestion({
       classGroup: selectedClass,
@@ -318,6 +354,7 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
       imageUrl: imageUrl.trim() || undefined,
     });
 
+    setEditingQuestionId(null);
     setNewQuestion('');
     setOptionA('');
     setOptionB('');
@@ -898,16 +935,43 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
       {/* MODE 2: TEACHER BANK SOAL MANAGEMENT */}
       {activeTab === 'teacher' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h3 className="text-lg font-black text-blue-950 dark:text-white uppercase flex items-center gap-2">
               📚 BANK SOAL KUIS KELAS {selectedClass} ({quizList.filter((q) => q.classGroup === selectedClass).length} Soal)
             </h3>
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-xs py-2.5 px-4 rounded-xl border-2 border-yellow-300 shadow-[3px_3px_0px_#1e3a8a] active:translate-y-0.5 uppercase flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" /> TAMBAH SOAL BARU +
-            </button>
+            <div className="flex items-center gap-2">
+              {quizList.filter((q) => q.classGroup === selectedClass).length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (
+                      confirm(
+                        `Apakah Anda yakin ingin MENGHAPUS SEMUA soal kuis untuk Kelas ${selectedClass}? Data yang dihapus tidak dapat dikembalikan.`
+                      )
+                    ) {
+                      if (onDeleteAllClassQuestions) {
+                        onDeleteAllClassQuestions(selectedClass);
+                      } else {
+                        quizList
+                          .filter((q) => q.classGroup === selectedClass)
+                          .forEach((q) => onDeleteQuestion(q.id));
+                      }
+                      playSound('click', soundEnabled);
+                    }
+                  }}
+                  className="bg-rose-100 hover:bg-rose-200 text-rose-700 dark:bg-rose-950/80 dark:text-rose-300 font-extrabold text-xs py-2.5 px-3.5 rounded-xl border border-rose-300 dark:border-rose-800 transition-all flex items-center gap-1.5"
+                >
+                  <Trash2 className="w-4 h-4 text-rose-600" /> Hapus Semua Soal Kelas {selectedClass}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleOpenAddModal}
+                className="bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-xs py-2.5 px-4 rounded-xl border-2 border-yellow-300 shadow-[3px_3px_0px_#1e3a8a] active:translate-y-0.5 uppercase flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" /> TAMBAH SOAL BARU +
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -916,50 +980,71 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
               .map((q, idx) => (
                 <div
                   key={q.id}
-                  className="bg-white dark:bg-slate-900 rounded-2xl p-5 border-2 border-slate-200 dark:border-slate-800 shadow-md space-y-3 relative"
+                  className="bg-white dark:bg-slate-900 rounded-2xl p-5 border-2 border-slate-200 dark:border-slate-800 shadow-md space-y-3 relative flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase bg-blue-100 text-blue-900 px-2.5 py-0.5 rounded-full">
-                      {SUBJECTS_MAP[q.subjectCode]?.fullName || q.subjectCode}
-                    </span>
-                    <button
-                      onClick={() => {
-                        if (confirm('Hapus soal ini?')) onDeleteQuestion(q.id);
-                      }}
-                      className="text-slate-400 hover:text-rose-600 p-1"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <p className="text-xs font-black text-blue-950 dark:text-white leading-snug">
-                    {idx + 1}. {q.question}
-                  </p>
-
-                  {q.imageUrl && (
-                    <div className="rounded-xl overflow-hidden border border-slate-200 max-h-32 bg-slate-50 flex items-center justify-center">
-                      <img
-                        src={q.imageUrl}
-                        alt="Gambar Soal"
-                        className="max-h-32 object-contain"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-1.5 text-[11px] font-bold">
-                    {q.options.map((opt, oIdx) => (
-                      <div
-                        key={oIdx}
-                        className={`p-1.5 rounded-lg border ${
-                          oIdx === q.correctAnswerIndex
-                            ? 'bg-green-100 text-green-900 border-green-300 dark:bg-green-950/60 dark:text-green-200'
-                            : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
-                        }`}
-                      >
-                        {String.fromCharCode(65 + oIdx)}. {opt} {oIdx === q.correctAnswerIndex && '✓'}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-black uppercase bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
+                        {SUBJECTS_MAP[q.subjectCode]?.fullName || q.subjectCode}
+                      </span>
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditModal(q)}
+                          className="flex items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-900 dark:bg-amber-950 dark:text-amber-200 px-2.5 py-1 rounded-xl text-xs font-black border border-amber-300 transition-all"
+                          title="Edit Soal Ini"
+                        >
+                          <Pencil className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300" /> Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm(`Hapus soal "${q.question}"?`)) onDeleteQuestion(q.id);
+                          }}
+                          className="flex items-center gap-1 bg-rose-100 hover:bg-rose-200 text-rose-700 dark:bg-rose-950 dark:text-rose-300 px-2.5 py-1 rounded-xl text-xs font-black border border-rose-300 transition-all"
+                          title="Hapus Soal Ini"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-rose-600" /> Hapus
+                        </button>
                       </div>
-                    ))}
+                    </div>
+
+                    <p className="text-xs font-black text-blue-950 dark:text-white leading-snug">
+                      {idx + 1}. {q.question}
+                    </p>
+
+                    {q.imageUrl && (
+                      <div className="rounded-xl overflow-hidden border border-slate-200 max-h-32 bg-slate-50 flex items-center justify-center">
+                        <img
+                          src={q.imageUrl}
+                          alt="Gambar Soal"
+                          className="max-h-32 object-contain"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-1.5 text-[11px] font-bold">
+                      {q.options.map((opt, oIdx) => (
+                        <div
+                          key={oIdx}
+                          className={`p-1.5 rounded-lg border ${
+                            oIdx === q.correctAnswerIndex
+                              ? 'bg-green-100 text-green-900 border-green-300 dark:bg-green-950/60 dark:text-green-200'
+                              : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          {String.fromCharCode(65 + oIdx)}. {opt} {oIdx === q.correctAnswerIndex && '✓'}
+                        </div>
+                      ))}
+                    </div>
+
+                    {q.explanation && (
+                      <div className="bg-amber-50 dark:bg-slate-800/80 p-2.5 rounded-xl border border-amber-200 dark:border-slate-700 text-[11px] text-amber-950 dark:text-amber-200 font-medium leading-relaxed">
+                        💡 <span className="font-bold">Pembahasan:</span> {q.explanation}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -967,18 +1052,28 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
         </div>
       )}
 
-      {/* Modal Add Question */}
+      {/* Modal Add / Edit Question */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
           <div className="bg-white dark:bg-slate-900 border-4 border-blue-200 dark:border-slate-800 rounded-[32px] max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-slate-200 dark:border-slate-800">
               <h3 className="text-xl font-black text-blue-950 dark:text-white uppercase flex items-center gap-2">
-                <Plus className="w-5 h-5 text-blue-600" />
-                BUAT SOAL KUIS (KELAS {selectedClass})
+                {editingQuestionId ? (
+                  <>
+                    <Pencil className="w-5 h-5 text-amber-500" />
+                    EDIT SOAL KUIS (KELAS {selectedClass})
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-5 h-5 text-blue-600" />
+                    BUAT SOAL KUIS (KELAS {selectedClass})
+                  </>
+                )}
               </h3>
               <button
+                type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500"
+                className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1084,15 +1179,27 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
               </div>
 
               <div>
-                <label className="font-black text-blue-950 dark:text-slate-200 block uppercase mb-1">
-                  Penjelasan Pembahasan (Opsional):
-                </label>
-                <input
-                  type="text"
-                  placeholder="Mengapa jawaban ini benar..."
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-black text-blue-950 dark:text-slate-200 block uppercase">
+                    Penjelasan Pembahasan (Opsional):
+                  </label>
+                  <span
+                    className={`text-[10px] font-extrabold ${
+                      explanation.length >= 250
+                        ? 'text-rose-600 dark:text-rose-400'
+                        : 'text-slate-400'
+                    }`}
+                  >
+                    {explanation.length} / 250 Karakter
+                  </span>
+                </div>
+                <textarea
+                  rows={3}
+                  maxLength={250}
+                  placeholder="Tuliskan penjelasan atau alasan mengapa jawaban ini benar (maksimal 250 karakter)..."
                   value={explanation}
                   onChange={(e) => setExplanation(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-800 font-bold py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700"
+                  className="w-full bg-slate-50 dark:bg-slate-800 font-bold py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-yellow-400 focus:outline-none resize-none"
                 />
               </div>
 
@@ -1100,7 +1207,7 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="font-black text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-xl uppercase"
+                  className="font-black text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl uppercase"
                 >
                   Batal
                 </button>
@@ -1108,7 +1215,7 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
                   type="submit"
                   className="bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black py-2 px-4 rounded-xl border-2 border-yellow-300 shadow-[2px_2px_0px_#1e3a8a] active:translate-y-0.5 uppercase flex items-center gap-1.5"
                 >
-                  <Check className="w-4 h-4 text-blue-950" /> SIMPAN SOAL
+                  <Check className="w-4 h-4 text-blue-950" /> {editingQuestionId ? 'SIMPAN PERUBAHAN' : 'SIMPAN SOAL'}
                 </button>
               </div>
             </form>
