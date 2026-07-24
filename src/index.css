@@ -12,7 +12,12 @@
     box-shadow: none !important;
   }
 
-  /* Hide the web application background layout, header, main content, and navigation when printing */
+  /* Hide everything in the body by default */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Reset html and body for clean 1-page printing */
   html, body {
     background: #ffffff !important;
     color: #000000 !important;
@@ -23,49 +28,21 @@
     overflow: hidden !important;
   }
 
-  /* Hide header, main app view, footer, buttons, inputs, dropdowns */
-  #root > header,
-  #root > main,
-  #root > footer,
-  .print\:hidden,
-  button,
-  input,
-  select,
-  .no-print {
-    display: none !important;
+  /* Make ONLY #printable-roster-area and its descendants visible */
+  #printable-roster-area,
+  #printable-roster-area * {
+    visibility: visible !important;
   }
 
-  /* Reset fixed modal overlay containers for clean printing */
-  .fixed {
-    position: static !important;
-    inset: auto !important;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .fixed > div {
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-  }
-
-  /* Format #printable-roster-area as the exclusive printed document in landscape */
+  /* Position #printable-roster-area as the top-level document in print */
   #printable-roster-area {
     display: block !important;
-    visibility: visible !important;
-    position: relative !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 0 auto !important;
+    margin: 0 !important;
     padding: 8px !important;
     box-sizing: border-box !important;
     border: 2px solid #1e293b !important;
@@ -73,10 +50,6 @@
     background: #ffffff !important;
     page-break-inside: avoid !important;
     page-break-after: avoid !important;
-  }
-
-  #printable-roster-area * {
-    visibility: visible !important;
   }
 
   table {

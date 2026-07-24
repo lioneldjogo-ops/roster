@@ -163,8 +163,6 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
     }
   }, [selectedClass, isOpen]);
 
-  if (!isOpen) return null;
-
   const theme = getClassTheme(selectedClass);
 
   const handlePrint = () => {
@@ -200,7 +198,13 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+    <div
+      className={
+        isOpen
+          ? "fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in overflow-y-auto"
+          : "hidden print:block"
+      }
+    >
       <div className="bg-white text-slate-900 rounded-[32px] border-4 border-amber-400 max-w-5xl w-full p-4 sm:p-6 shadow-2xl space-y-5 max-h-[95vh] overflow-y-auto my-auto print:max-w-none print:w-full print:p-0 print:border-none print:shadow-none print:rounded-none">
         {/* Modal Controls Bar (Hidden during window.print) */}
         <div className="print:hidden flex items-center justify-between pb-4 border-b-2 border-dashed border-slate-200">
