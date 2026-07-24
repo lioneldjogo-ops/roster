@@ -1,14 +1,47 @@
 import React, { useState } from 'react';
 import { ALL_CLASSES } from '../data/defaultSchedule';
-import { ClassGroup, DayOfWeek } from '../types';
-import { Bell, BellOff, Calendar, Clock, Edit3, Grid, School, Sparkles, CheckSquare, RefreshCw, Menu, X, ChevronRight } from 'lucide-react';
+import { ClassGroup, DayOfWeek, UserRole } from '../types';
+import {
+  Bell,
+  BellOff,
+  Calendar,
+  Clock,
+  Edit3,
+  Grid,
+  School,
+  Sparkles,
+  CheckSquare,
+  RefreshCw,
+  Menu,
+  X,
+  ChevronRight,
+  BookOpen,
+  Gamepad2,
+  FileSpreadsheet,
+  Lock,
+  Unlock,
+  Users,
+  GraduationCap,
+  Award,
+  Heart
+} from 'lucide-react';
 import schoolLogo from '../assets/images/school_logo_st_teresia_1784846232480.jpg';
+
+export type ActiveTab =
+  | 'class'
+  | 'matrix'
+  | 'reminders'
+  | 'homework'
+  | 'quiz'
+  | 'manage'
+  | 'parent_portal'
+  | 'teacher_reports';
 
 interface HeaderProps {
   selectedClass: ClassGroup;
   onSelectClass: (c: ClassGroup) => void;
-  activeTab: 'class' | 'matrix' | 'reminders' | 'manage';
-  onSelectTab: (tab: 'class' | 'matrix' | 'reminders' | 'manage') => void;
+  activeTab: ActiveTab;
+  onSelectTab: (tab: ActiveTab) => void;
   currentDay: DayOfWeek | null;
   currentTimeStr: string;
   activePeriodName?: string;
@@ -16,6 +49,13 @@ interface HeaderProps {
   notificationsEnabled: boolean;
   onRequestNotificationPermission: () => void;
   onResetDefaultSchedule: () => void;
+  onOpenGoogleSheetsModal: () => void;
+  isLoggedInGoogle?: boolean;
+  userRole: UserRole;
+  onSelectRole: (role: UserRole) => void;
+  isTeacherAuthenticated: boolean;
+  onOpenPinModal: () => void;
+  onLogoutTeacher: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,12 +70,31 @@ export const Header: React.FC<HeaderProps> = ({
   notificationsEnabled,
   onRequestNotificationPermission,
   onResetDefaultSchedule,
+  onOpenGoogleSheetsModal,
+  isLoggedInGoogle,
+  userRole,
+  onSelectRole,
+  isTeacherAuthenticated,
+  onOpenPinModal,
+  onLogoutTeacher,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleTabClick = (tab: 'class' | 'matrix' | 'reminders' | 'manage') => {
+  const handleTabClick = (tab: ActiveTab) => {
     onSelectTab(tab);
     setIsMobileMenuOpen(false);
+  };
+
+  const handleRoleClick = (role: UserRole) => {
+    if (role === 'teacher') {
+      if (!isTeacherAuthenticated) {
+        onOpenPinModal();
+      } else {
+        onSelectRole('teacher');
+      }
+    } else {
+      onSelectRole(role);
+    }
   };
 
   return (
@@ -66,8 +125,83 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
+      {/* Role Switcher Bar (Sisi Murid, Sisi Orang Tua, Sisi Sekolah/Guru) */}
+      <div className="bg-blue-900/90 py-2 px-3 border-b-2 border-yellow-400">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto w-full sm:w-auto scrollbar-none py-0.5">
+            <span className="text-[10px] font-black uppercase text-yellow-300 bg-blue-950 px-2 py-1 rounded-lg border border-blue-800 shrink-0 hidden md:inline">
+              MODE AKSEBILITAS:
+            </span>
+
+            {/* Role 1: Sisi Murid */}
+            <button
+              onClick={() => handleRoleClick('student')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+                userRole === 'student'
+                  ? 'bg-yellow-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-300 scale-[1.02]'
+                  : 'bg-blue-800 hover:bg-blue-700 text-blue-100 border border-blue-700'
+              }`}
+            >
+              <GraduationCap className="w-4 h-4 text-amber-900" />
+              <span>SISI MURID</span>
+            </button>
+
+            {/* Role 2: Sisi Orang Tua */}
+            <button
+              onClick={() => handleRoleClick('parent')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+                userRole === 'parent'
+                  ? 'bg-emerald-400 text-blue-950 shadow-[2px_2px_0px_#14532d] border-2 border-emerald-300 scale-[1.02]'
+                  : 'bg-blue-800 hover:bg-blue-700 text-blue-100 border border-blue-700'
+              }`}
+            >
+              <Users className="w-4 h-4 text-emerald-950" />
+              <span>SISI ORANG TUA</span>
+            </button>
+
+            {/* Role 3: Sisi Sekolah / Guru */}
+            <button
+              onClick={() => handleRoleClick('teacher')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+                userRole === 'teacher'
+                  ? 'bg-amber-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-500 scale-[1.02]'
+                  : 'bg-blue-800 hover:bg-blue-700 text-yellow-300 border border-blue-700'
+              }`}
+            >
+              {isTeacherAuthenticated ? (
+                <Unlock className="w-4 h-4 text-green-950" />
+              ) : (
+                <Lock className="w-4 h-4 text-amber-300" />
+              )}
+              <span>SISI GURU & SEKOLAH</span>
+              {isTeacherAuthenticated && (
+                <span className="bg-green-700 text-white text-[9px] px-1.5 py-0.2 rounded-full font-black">
+                  PIN OK
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Teacher Logout button if authenticated */}
+          {isTeacherAuthenticated && (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-green-300 bg-green-950 px-2 py-0.5 rounded-full border border-green-700 hidden lg:inline">
+                🔒 Terautentikasi (PIN: st-theresia)
+              </span>
+              <button
+                onClick={onLogoutTeacher}
+                className="text-[10px] font-black bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-xl border border-rose-400 uppercase transition-all"
+                title="Kunci Akses Guru"
+              >
+                KUNCI MODE GURU
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Main Branding & Navigation Section */}
-      <div className="max-w-7xl mx-auto px-3 md:px-4 py-2.5 md:py-4 flex items-center justify-between gap-2 md:gap-4">
+      <div className="max-w-7xl mx-auto px-3 md:px-4 py-2.5 md:py-3 flex items-center justify-between gap-2 md:gap-4">
         {/* Logo & School Name */}
         <div className="flex items-center gap-2.5 md:gap-4 min-w-0">
           <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-full p-0.5 md:p-1 shadow-lg border-2 border-yellow-400 flex items-center justify-center shrink-0">
@@ -86,16 +220,20 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </h1>
             <p className="text-[10px] sm:text-xs text-blue-100 font-bold tracking-wide truncate">
-              Jadwal Pelajaran & Notifikasi Harian Siswa
+              {userRole === 'parent'
+                ? '👨‍👩‍👧 Mode Orang Tua: Laporan Belajar & Prestasi Murid'
+                : userRole === 'teacher'
+                ? '🏫 Mode Sekolah & Guru: Kelola Jadwal, PR, & Laporan Siswa'
+                : '🎓 Mode Murid: Jadwal Pelajaran, PR, & Game Kuis'}
             </p>
           </div>
         </div>
 
         {/* Desktop Controls (Class Selector & Buttons) */}
-        <div className="hidden md:flex items-center gap-2.5">
+        <div className="hidden md:flex items-center gap-2">
           {/* Class selector */}
-          <div className="flex items-center gap-2 bg-blue-700 p-1.5 rounded-2xl border-2 border-blue-500 shadow-inner">
-            <span className="text-xs font-black text-white px-2 flex items-center gap-1 uppercase tracking-tight">
+          <div className="flex items-center gap-1.5 bg-blue-700 p-1.5 rounded-2xl border-2 border-blue-500 shadow-inner">
+            <span className="text-xs font-black text-white px-1.5 flex items-center gap-1 uppercase tracking-tight">
               <School className="w-4 h-4 text-yellow-300" /> Kelas:
             </span>
             <select
@@ -111,10 +249,22 @@ export const Header: React.FC<HeaderProps> = ({
             </select>
           </div>
 
+          {/* Google Sheets Sync Button */}
+          {userRole === 'teacher' && (
+            <button
+              onClick={onOpenGoogleSheetsModal}
+              className="flex items-center gap-1.5 text-xs font-black bg-green-500 hover:bg-green-400 text-white px-3.5 py-2 rounded-2xl border-2 border-green-300 transition-all shadow-[3px_3px_0px_#14532d] active:translate-y-0.5"
+              title="Integrasi & Sync Google Sheets"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-white" />
+              <span className="uppercase">GOOGLE SHEETS</span>
+            </button>
+          )}
+
           {/* Notification permission button */}
           <button
             onClick={onRequestNotificationPermission}
-            className={`flex items-center gap-2 text-xs font-black px-3.5 py-2 rounded-2xl transition-all shadow-[3px_3px_0px_#1e3a8a] active:translate-y-0.5 active:shadow-none ${
+            className={`flex items-center gap-1.5 text-xs font-black px-3.5 py-2 rounded-2xl transition-all shadow-[3px_3px_0px_#1e3a8a] active:translate-y-0.5 active:shadow-none ${
               notificationsEnabled
                 ? 'bg-green-400 hover:bg-green-300 text-green-950 border-2 border-green-300'
                 : 'bg-yellow-400 hover:bg-yellow-300 text-blue-950 border-2 border-yellow-300'
@@ -133,23 +283,9 @@ export const Header: React.FC<HeaderProps> = ({
               </>
             )}
           </button>
-
-          {/* Reset button */}
-          <button
-            onClick={() => {
-              if (confirm('Aplikasi akan memuat ulang Jadwal Resmi TAPEL 2025/2026. Lanjutkan?')) {
-                onResetDefaultSchedule();
-              }
-            }}
-            className="flex items-center gap-1.5 text-xs font-black bg-blue-800 hover:bg-blue-700 text-blue-100 px-3 py-2 rounded-2xl border-2 border-blue-600 transition-colors shadow-sm"
-            title="Reset ke Jadwal Asli TAPEL 2025/2026"
-          >
-            <RefreshCw className="w-3.5 h-3.5 text-yellow-300" />
-            <span className="hidden lg:inline">RESET</span>
-          </button>
         </div>
 
-        {/* Mobile Hamburger Menu Button (Garis Tiga) */}
+        {/* Mobile Hamburger Menu Button */}
         <div className="flex md:hidden items-center gap-1.5 shrink-0">
           <select
             value={selectedClass}
@@ -182,7 +318,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto py-1 scrollbar-none">
           <button
             onClick={() => handleTabClick('class')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
               activeTab === 'class'
                 ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
                 : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
@@ -194,48 +330,112 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => handleTabClick('matrix')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
               activeTab === 'matrix'
                 ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
                 : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
             }`}
           >
             <Grid className="w-4 h-4" />
-            MATRIKS SEMUA KELAS
+            MATRIKS KELAS
+          </button>
+
+          {/* Parent Portal Tab */}
+          <button
+            onClick={() => handleTabClick('parent_portal')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+              activeTab === 'parent_portal'
+                ? 'bg-emerald-400 text-blue-950 shadow-[4px_4px_0px_#14532d] border-2 border-emerald-300 scale-[1.02]'
+                : 'bg-emerald-900/60 hover:bg-emerald-800 text-emerald-100 border-2 border-emerald-500/40'
+            }`}
+          >
+            <Award className="w-4 h-4 text-emerald-200" />
+            PORTAL ORANG TUA (PRESTASI)
+          </button>
+
+          <button
+            onClick={() => handleTabClick('homework')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+              activeTab === 'homework'
+                ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
+                : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            TUGAS RUMAH (PR)
+          </button>
+
+          <button
+            onClick={() => handleTabClick('quiz')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+              activeTab === 'quiz'
+                ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
+                : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
+            }`}
+          >
+            <Gamepad2 className="w-4 h-4 text-amber-300" />
+            GAME KUIS SAYA
           </button>
 
           <button
             onClick={() => handleTabClick('reminders')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
               activeTab === 'reminders'
                 ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
                 : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
             }`}
           >
             <CheckSquare className="w-4 h-4" />
-            PENGINGAT & CHECKLIST
+            PENGINGAT TAS
           </button>
 
-          <button
-            onClick={() => handleTabClick('manage')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
-              activeTab === 'manage'
-                ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
-                : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
-            }`}
-          >
-            <Edit3 className="w-4 h-4" />
-            INPUT & EDIT JADWAL +
-          </button>
+          {/* Teacher Reports Input Tab */}
+          {userRole === 'teacher' && (
+            <button
+              onClick={() => handleTabClick('teacher_reports')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+                activeTab === 'teacher_reports'
+                  ? 'bg-amber-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-amber-300 scale-[1.02]'
+                  : 'bg-amber-900/60 hover:bg-amber-800 text-amber-100 border-2 border-amber-500/40'
+              }`}
+            >
+              <Award className="w-4 h-4 text-amber-300" />
+              INPUT PRESTASI MURID +
+            </button>
+          )}
+
+          {userRole === 'teacher' && (
+            <button
+              onClick={() => handleTabClick('manage')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap ${
+                activeTab === 'manage'
+                  ? 'bg-yellow-400 text-blue-950 shadow-[4px_4px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
+                  : 'bg-white/10 hover:bg-white/20 text-white border-2 border-transparent'
+              }`}
+            >
+              <Edit3 className="w-4 h-4" />
+              KELOLA JADWAL +
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Mobile Menu Drawer (Menu Garis Tiga Container) */}
+      {/* Mobile Menu Drawer */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-blue-800 border-t-4 border-yellow-400 p-4 shadow-2xl space-y-3 animate-fade-in">
           <div className="flex items-center justify-between pb-2 border-b border-blue-600 text-xs font-black text-yellow-300 uppercase">
             <span>MENU NAVIGASI APPS</span>
-            <span>PILIH KELAS & MENU</span>
+            {userRole === 'teacher' && (
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenGoogleSheetsModal();
+                }}
+                className="text-[11px] bg-green-500 text-white px-2.5 py-1 rounded-full font-black uppercase flex items-center gap-1"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" /> GOOGLE SHEETS
+              </button>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-2">
@@ -250,6 +450,21 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="flex items-center gap-2.5">
                 <Calendar className="w-4 h-4" />
                 <span>JADWAL KELAS {selectedClass}</span>
+              </div>
+              <ChevronRight className="w-4 h-4 opacity-70" />
+            </button>
+
+            <button
+              onClick={() => handleTabClick('parent_portal')}
+              className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
+                activeTab === 'parent_portal'
+                  ? 'bg-emerald-400 text-blue-950 shadow-[3px_3px_0px_#14532d] border-2 border-emerald-300'
+                  : 'bg-emerald-800 text-white hover:bg-emerald-700 border border-emerald-600'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Award className="w-4 h-4 text-emerald-200" />
+                <span>PORTAL ORANG TUA (PRESTASI & RAPOR)</span>
               </div>
               <ChevronRight className="w-4 h-4 opacity-70" />
             </button>
@@ -270,69 +485,71 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
-              onClick={() => handleTabClick('reminders')}
+              onClick={() => handleTabClick('homework')}
               className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
-                activeTab === 'reminders'
+                activeTab === 'homework'
                   ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300'
                   : 'bg-blue-700 text-white hover:bg-blue-600 border border-blue-500'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <CheckSquare className="w-4 h-4" />
-                <span>PENGINGAT & CHECKLIST TAS</span>
+                <BookOpen className="w-4 h-4" />
+                <span>TUGAS RUMAH (PR)</span>
               </div>
               <ChevronRight className="w-4 h-4 opacity-70" />
             </button>
 
             <button
-              onClick={() => handleTabClick('manage')}
+              onClick={() => handleTabClick('quiz')}
               className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
-                activeTab === 'manage'
+                activeTab === 'quiz'
                   ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300'
                   : 'bg-blue-700 text-white hover:bg-blue-600 border border-blue-500'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <Edit3 className="w-4 h-4" />
-                <span>INPUT & EDIT JADWAL +</span>
+                <Gamepad2 className="w-4 h-4" />
+                <span>GAME KUIS MATA PELAJARAN</span>
               </div>
               <ChevronRight className="w-4 h-4 opacity-70" />
             </button>
-          </div>
 
-          {/* Quick Action Controls in Mobile Drawer */}
-          <div className="pt-3 border-t border-blue-600 flex items-center justify-between gap-2">
-            <button
-              onClick={() => {
-                onRequestNotificationPermission();
-                setIsMobileMenuOpen(false);
-              }}
-              className={`flex-1 flex items-center justify-center gap-2 text-xs font-black py-2.5 px-3 rounded-xl border-2 transition-all shadow-sm ${
-                notificationsEnabled
-                  ? 'bg-green-400 text-green-950 border-green-300'
-                  : 'bg-yellow-400 text-blue-950 border-yellow-300'
-              }`}
-            >
-              <Bell className="w-4 h-4" />
-              <span>{notificationsEnabled ? 'ALARM AKTIF' : 'AKTIFKAN ALARM'}</span>
-            </button>
+            {userRole === 'teacher' && (
+              <button
+                onClick={() => handleTabClick('teacher_reports')}
+                className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
+                  activeTab === 'teacher_reports'
+                    ? 'bg-amber-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-amber-300'
+                    : 'bg-blue-700 text-white hover:bg-blue-600 border border-blue-500'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Award className="w-4 h-4 text-amber-300" />
+                  <span>INPUT PRESTASI & PERKEMBANGAN MURID</span>
+                </div>
+                <ChevronRight className="w-4 h-4 opacity-70" />
+              </button>
+            )}
 
-            <button
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                if (confirm('Aplikasi akan memuat ulang Jadwal Resmi TAPEL 2025/2026. Lanjutkan?')) {
-                  onResetDefaultSchedule();
-                }
-              }}
-              className="flex items-center gap-1.5 bg-blue-900 text-blue-100 text-xs font-black py-2.5 px-3 rounded-xl border border-blue-600"
-            >
-              <RefreshCw className="w-3.5 h-3.5 text-yellow-300" />
-              <span>RESET</span>
-            </button>
+            {userRole === 'teacher' && (
+              <button
+                onClick={() => handleTabClick('manage')}
+                className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
+                  activeTab === 'manage'
+                    ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300'
+                    : 'bg-blue-700 text-white hover:bg-blue-600 border border-blue-500'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Edit3 className="w-4 h-4" />
+                  <span>INPUT & EDIT JADWAL +</span>
+                </div>
+                <ChevronRight className="w-4 h-4 opacity-70" />
+              </button>
+            )}
           </div>
         </div>
       )}
     </header>
   );
 };
-

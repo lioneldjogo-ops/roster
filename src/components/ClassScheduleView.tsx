@@ -28,6 +28,20 @@ export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
     currentDay || 'Senin'
   );
 
+  const [classSubjectTeachers, setClassSubjectTeachers] = React.useState<Record<string, string>>({});
+
+  React.useEffect(() => {
+    try {
+      const savedSubjectTeachers = localStorage.getItem('sdk_teresia_subject_teachers_v1');
+      if (savedSubjectTeachers) {
+        const parsed = JSON.parse(savedSubjectTeachers);
+        setClassSubjectTeachers(parsed[selectedClass] || {});
+      } else {
+        setClassSubjectTeachers({});
+      }
+    } catch (e) {}
+  }, [selectedClass]);
+
   const renderSubjectIcon = (iconName: string) => {
     switch (iconName) {
       case 'BookOpen': return <BookOpen className="w-5 h-5" />;
@@ -235,7 +249,7 @@ export const ClassScheduleView: React.FC<ClassScheduleViewProps> = ({
                             {/* Teacher info */}
                             <div className="text-xs text-slate-700 dark:text-slate-200 space-y-1 pt-2 border-t-2 border-dashed border-black/10 dark:border-white/10 font-bold">
                               <p className="flex items-center gap-1.5">
-                                👩‍🏫 {scheduleItem?.teacherName || subjectInfo.teacherDefault || 'Guru Pengajar'}
+                                👩‍🏫 {(scheduleItem && classSubjectTeachers[scheduleItem.subjectCode]) || scheduleItem?.teacherName || subjectInfo.teacherDefault || 'Guru Pengajar'}
                               </p>
                               {scheduleItem?.notes && (
                                 <p className="text-[11px] text-blue-900 dark:text-blue-300 bg-white/60 dark:bg-slate-900/60 p-2 rounded-xl border border-blue-200 dark:border-slate-700 font-bold">

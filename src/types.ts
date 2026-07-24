@@ -70,3 +70,83 @@ export interface EquipmentChecklistItem {
   isChecked: boolean;
   day: DayOfWeek;
 }
+
+export interface Student {
+  id: string;
+  classGroup: ClassGroup;
+  name: string;
+  nim?: string; // NIM / NISN / No. Induk
+  attendanceNo?: number;
+}
+
+export interface ClassTeacherInfo {
+  classGroup: ClassGroup;
+  homeroomTeacher: string; // Nama Wali Kelas
+  subjectTeachers: Record<string, string>; // subjectCode -> teacherName
+}
+
+export interface HomeworkCompletionRecord {
+  studentId: string;
+  studentName: string;
+  completedAt: string;
+}
+
+export interface HomeworkItem {
+  id: string;
+  classGroup: ClassGroup;
+  subjectCode: string;
+  title: string;
+  description: string;
+  dueDate: string; // e.g. "2025-07-25" or "Jumat, 25 Juli 2025"
+  teacherName: string;
+  completed: boolean;
+  createdAt: string;
+  completedByStudents?: HomeworkCompletionRecord[];
+}
+
+export interface QuizQuestion {
+  id: string;
+  classGroup: ClassGroup;
+  subjectCode: string;
+  question: string;
+  options: string[]; // 4 multiple choice options
+  correctAnswerIndex: number; // 0, 1, 2, 3
+  explanation: string;
+  teacherName: string;
+}
+
+export type UserRole = 'student' | 'parent' | 'teacher';
+
+export type AchievementCategory = 'akademik' | 'non-akademik' | 'karakter' | 'penghargaan';
+
+export interface StudentAchievement {
+  id: string;
+  studentId: string;
+  studentName: string;
+  classGroup: ClassGroup;
+  title: string;
+  category: AchievementCategory;
+  date: string;
+  givenBy: string;
+  description: string;
+  badgeIcon?: string; // Emoji e.g. "🏆", "🌟", "🥇", "🎨", "⚽"
+}
+
+export interface StudentProgressReport {
+  id: string;
+  studentId: string;
+  studentName: string;
+  classGroup: ClassGroup;
+  academicPeriod: string; // e.g. "Semester Ganjil 2025/2026"
+  attendance: {
+    present: number;
+    sick: number;
+    permission: number;
+    absent: number;
+  };
+  conductGrade: 'Sangat Baik (A)' | 'Baik (B)' | 'Cukup (C)';
+  homeroomNotes: string;
+  subjectGrades: Record<string, number>; // subjectCode -> score 0-100
+  updatedAt: string;
+}
+
