@@ -34,6 +34,35 @@ import mascotTrophy from '../assets/images/quiz_mascot_trophy_1784887237478.jpg'
 
 import puzzleLibrary from '../assets/images/puzzle_school_library_1784887581519.jpg';
 import puzzleSafari from '../assets/images/puzzle_animal_safari_1784887596725.jpg';
+import puzzleSpace from '../assets/images/puzzle_space_exploration_1784887885776.jpg';
+import puzzleSea from '../assets/images/puzzle_underwater_sea_1784887899080.jpg';
+import puzzleDino from '../assets/images/puzzle_dinosaur_park_1784887910555.jpg';
+import puzzleFuture from '../assets/images/puzzle_future_city_1784887922618.jpg';
+import puzzleScience from '../assets/images/puzzle_science_lab_1784887936107.jpg';
+import puzzleSnow from '../assets/images/puzzle_snowy_mountain_1784887946860.jpg';
+import puzzleCastle from '../assets/images/puzzle_magic_castle_1784887959404.jpg';
+import puzzleGarden from '../assets/images/puzzle_flower_garden_1784887972475.jpg';
+
+export interface PuzzleTheme {
+  id: string;
+  name: string;
+  icon: string;
+  image: string;
+  description: string;
+}
+
+export const PUZZLE_THEMES: PuzzleTheme[] = [
+  { id: 'library', name: 'Perpustakaan Ajaib', icon: '📚', image: puzzleLibrary, description: 'Eksplorasi buku-buku ajaib bersama Owi' },
+  { id: 'safari', name: 'Hutan Safari Hewan', icon: '🦁', image: puzzleSafari, description: 'Petualangan seru bersama satwa hantu' },
+  { id: 'space', name: 'Luar Angkasa', icon: '🚀', image: puzzleSpace, description: 'Menjelajahi planet & bintang bersinar' },
+  { id: 'sea', name: 'Bawah Laut', icon: '🐬', image: puzzleSea, description: 'Istana terumbu karang & lumba-lumba' },
+  { id: 'dino', name: 'Taman Dinosaurus', icon: '🦕', image: puzzleDino, description: 'Bermain bersama bayi dino lucu' },
+  { id: 'future', name: 'Kota Masa Depan', icon: '🏙️', image: puzzleFuture, description: 'Mobil terbang & kota pintar canggih' },
+  { id: 'science', name: 'Lab Sains Cilik', icon: '🧪', image: puzzleScience, description: 'Eksperimen gembira & ramuan ajaib' },
+  { id: 'snow', name: 'Dunia Salju Penguin', icon: '🐧', image: puzzleSnow, description: 'Bermain di istana es bersama penguin' },
+  { id: 'castle', name: 'Istana Dongeng', icon: '🏰', image: puzzleCastle, description: 'Istana awan dengan pelangi & unicorn' },
+  { id: 'garden', name: 'Taman Kupu-Kupu', icon: '🦋', image: puzzleGarden, description: 'Bunga indah & kumbang yang ramah' },
+];
 
 interface TeacherQuizGameProps {
   quizList: QuizQuestion[];
@@ -148,7 +177,7 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
   const [gameOver, setGameOver] = useState(false);
 
   // Puzzle State
-  const [selectedPuzzleTheme, setSelectedPuzzleTheme] = useState<'library' | 'safari'>('library');
+  const [selectedPuzzleTheme, setSelectedPuzzleTheme] = useState<string>('library');
   const [unlockedPieces, setUnlockedPieces] = useState<boolean[]>([]);
   const [showWrongModal, setShowWrongModal] = useState(false);
 
@@ -198,7 +227,8 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
     };
   }, [gameStarted, isAnswered, gameOver, isTimerActive, timerSeconds]);
 
-  const activePuzzleImage = selectedPuzzleTheme === 'library' ? puzzleLibrary : puzzleSafari;
+  const activeThemeObj = PUZZLE_THEMES.find((t) => t.id === selectedPuzzleTheme) || PUZZLE_THEMES[0];
+  const activePuzzleImage = activeThemeObj.image;
 
   const handleStartGame = () => {
     if (activeQuestions.length === 0) return;
@@ -492,35 +522,51 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
                 </div>
               </div>
 
-              {/* Puzzle Theme Selector */}
-              <div className="bg-amber-50 dark:bg-slate-800/80 p-4 rounded-2xl border-2 border-amber-300 text-left space-y-2">
-                <span className="text-xs font-black uppercase text-amber-900 dark:text-amber-300 block">
-                  🎨 PILIH TEMA GAMBAR PUZZLE:
-                </span>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setSelectedPuzzleTheme('library')}
-                    className={`p-2.5 rounded-xl border-2 text-xs font-black flex items-center gap-2 transition-all ${
-                      selectedPuzzleTheme === 'library'
-                        ? 'bg-yellow-400 text-blue-950 border-yellow-300 shadow-sm'
-                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300'
-                    }`}
-                  >
-                    <span className="text-base">📚</span>
-                    <span>Perpustakaan Ajaib</span>
-                  </button>
+              {/* Puzzle Theme Selector (10 Themes) */}
+              <div className="bg-amber-50 dark:bg-slate-800/80 p-4.5 rounded-3xl border-3 border-amber-300 dark:border-slate-700 text-left space-y-3 shadow-md">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black uppercase text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-amber-500" /> PILIH 10 TEMA GAMBAR PUZZLE:
+                  </span>
+                  <span className="text-[10px] font-extrabold bg-amber-200 text-amber-950 px-2.5 py-0.5 rounded-full border border-amber-300">
+                    10 Tema 3D Pilihan
+                  </span>
+                </div>
 
-                  <button
-                    onClick={() => setSelectedPuzzleTheme('safari')}
-                    className={`p-2.5 rounded-xl border-2 text-xs font-black flex items-center gap-2 transition-all ${
-                      selectedPuzzleTheme === 'safari'
-                        ? 'bg-yellow-400 text-blue-950 border-yellow-300 shadow-sm'
-                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300'
-                    }`}
-                  >
-                    <span className="text-base">🦁</span>
-                    <span>Hutan Safari Hewan</span>
-                  </button>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+                  {PUZZLE_THEMES.map((theme) => {
+                    const isSelected = selectedPuzzleTheme === theme.id;
+                    return (
+                      <button
+                        key={theme.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPuzzleTheme(theme.id);
+                          playSound('click', soundEnabled);
+                        }}
+                        className={`p-2.5 rounded-2xl border-2 text-left transition-all relative overflow-hidden flex flex-col justify-between ${
+                          isSelected
+                            ? 'bg-yellow-400 text-blue-950 border-yellow-300 shadow-[3px_3px_0px_#1e3a8a] scale-[1.03] z-10'
+                            : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-amber-400 hover:bg-amber-50/50'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between w-full mb-1">
+                          <span className="text-xl">{theme.icon}</span>
+                          {isSelected && (
+                            <span className="w-4 h-4 rounded-full bg-blue-950 text-yellow-300 text-[10px] font-black flex items-center justify-center">
+                              ✓
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-xs font-black line-clamp-1">{theme.name}</div>
+                          <div className={`text-[9px] line-clamp-1 font-semibold ${isSelected ? 'text-blue-900' : 'text-slate-500 dark:text-slate-400'}`}>
+                            {theme.description}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -593,8 +639,9 @@ export const TeacherQuizGame: React.FC<TeacherQuizGameProps> = ({
                     <span className="text-xs font-black uppercase text-blue-950 dark:text-amber-300 flex items-center gap-1.5">
                       <Grid className="w-4 h-4 text-amber-600" /> PUZZLE GAMBAR MISTERI
                     </span>
-                    <span className="text-[10px] font-extrabold bg-amber-200 text-amber-950 px-2 py-0.5 rounded-md">
-                      {selectedPuzzleTheme === 'library' ? 'Perpustakaan' : 'Safari'}
+                    <span className="text-[10px] font-extrabold bg-amber-200 text-amber-950 px-2.5 py-0.5 rounded-full border border-amber-300 flex items-center gap-1">
+                      <span>{activeThemeObj.icon}</span>
+                      <span>{activeThemeObj.name}</span>
                     </span>
                   </div>
 
