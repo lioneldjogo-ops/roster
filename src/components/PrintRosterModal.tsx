@@ -463,16 +463,15 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
                         }
 
                         return (
-                          <td key={day} className="border-r border-slate-800 p-2 vertical-align-top bg-white">
+                          <td key={day} className="border-r border-slate-800 p-1.5 print:p-0.5 align-middle bg-white text-center">
                             {item && subInfo ? (
-                              <div className="space-y-0.5">
-                                <p className="font-black text-blue-950 text-xs leading-tight flex items-start gap-1">
-                                  <span>{subInfo.fullName}</span>
+                              <div className="flex flex-col items-center justify-center space-y-0.5 my-auto">
+                                <p className="font-black text-blue-950 text-xs print:text-[9px] leading-tight">
+                                  {subInfo.fullName}
                                 </p>
-                                <p className="text-[10px] font-bold text-slate-700 flex items-center gap-1">
-                                  <span>👩‍🏫</span>
-                                  <span className="font-extrabold text-blue-900">{teacherToShow}</span>
-                                </p>
+                                <span className="text-[10px] print:text-[8px] select-none">
+                                  📚
+                                </span>
                               </div>
                             ) : (
                               <span className="text-slate-300 text-[10px] italic">-</span>
