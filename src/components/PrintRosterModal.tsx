@@ -319,23 +319,23 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
         </div>
 
         {/* PRINTABLE ARTISTIC & FORMAL TABLE AREA */}
-        <div id="printable-roster-area" className="bg-white p-5 rounded-3xl border-4 border-slate-800 font-sans space-y-4 text-slate-900 print:border-2 print:border-slate-800 print:p-2.5 print:space-y-2">
+        <div id="printable-roster-area" className="bg-white p-5 rounded-3xl border-4 border-slate-800 font-sans space-y-4 text-slate-900 print:border-2 print:border-slate-800 print:p-2 print:space-y-1.5">
           {/* Top Decorative Banner with Cartoon Illustration of SD Students */}
-          <div className={`p-4 rounded-2xl border-2 ${theme.borderStyle} ${theme.headerBg} relative overflow-hidden space-y-3 print:p-2 print:space-y-1`}>
+          <div className={`p-4 rounded-2xl border-2 ${theme.borderStyle} ${theme.headerBg} relative overflow-hidden space-y-3 print:p-1.5 print:space-y-1`}>
             {/* Mascot Emojis Row */}
             <div className="flex items-center justify-between border-b border-slate-300/60 pb-2 print:pb-1">
               <div className="flex items-center gap-2">
-                <span className={`text-[11px] print:text-[9px] font-black uppercase px-3 py-1 print:px-2 print:py-0.5 rounded-full ${theme.badgeBg} shadow-sm border border-white/40`}>
+                <span className={`text-[11px] print:text-[8.5px] font-black uppercase px-3 py-1 print:px-2 print:py-0.5 rounded-full ${theme.badgeBg} shadow-sm border border-white/40`}>
                   {theme.badgeText}
                 </span>
-                <span className="text-xs print:text-[10px] font-black text-blue-950 uppercase flex items-center gap-1">
+                <span className="text-xs print:text-[9.5px] font-black text-blue-950 uppercase flex items-center gap-1">
                   <Sparkles className="w-4 h-4 print:w-3 print:h-3 text-amber-500 animate-pulse" />
                   {theme.gradeLabel}
                 </span>
               </div>
 
               {/* Animated Mascots Header Row */}
-              <div className="flex items-center gap-2 text-xl print:text-sm select-none">
+              <div className="flex items-center gap-2 text-xl print:text-xs select-none">
                 {theme.mascots.map((m, i) => (
                   <span key={i} className="hover:scale-125 transition-transform cursor-pointer animate-pulse" title="Karakter Animasi Kelas">
                     {m}
@@ -345,21 +345,21 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
             </div>
 
             {/* School Header Title Block with Cartoon SD Kids Illustrations */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 print:gap-2 pt-1">
+            <div className="flex flex-col md:flex-row print:flex-row items-center justify-between gap-4 print:gap-2 pt-1">
               {/* Left Cartoon Mascot Box */}
               <div className="flex flex-col items-center justify-center shrink-0">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 print:w-14 print:h-14 rounded-2xl print:rounded-xl overflow-hidden border-4 print:border-2 border-amber-400 shadow-md bg-white p-1 hover:scale-105 transition-transform duration-300 relative group">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 print:w-12 print:h-12 rounded-2xl print:rounded-lg overflow-hidden border-4 print:border-2 border-amber-400 shadow-md bg-white p-1 hover:scale-105 transition-transform duration-300 relative group">
                   <img
                     src={theme.cartoonImg}
                     alt={theme.cartoonCaption}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover rounded-xl print:rounded-lg"
+                    className="w-full h-full object-cover rounded-xl print:rounded-md"
                   />
-                  <div className="absolute -top-2 -right-2 bg-rose-500 text-white p-1 rounded-full text-[10px] print:text-[8px] animate-bounce shadow">
+                  <div className="absolute -top-2 -right-2 bg-rose-500 text-white p-1 rounded-full text-[10px] print:text-[7px] animate-bounce shadow">
                     🎒
                   </div>
                 </div>
-                <span className="text-[10px] print:text-[8px] font-black text-blue-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300 mt-1 uppercase text-center max-w-[130px] leading-tight">
+                <span className="text-[10px] print:text-[7.5px] font-black text-blue-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300 mt-1 uppercase text-center max-w-[130px] leading-tight">
                   Siswa Kelas {selectedClass}
                 </span>
               </div>
@@ -367,40 +367,40 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
               {/* Center Title Content */}
               <div className="text-center space-y-1.5 print:space-y-0.5 flex-1">
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-2xl print:text-base animate-bounce">🏫</span>
-                  <h2 className="text-xs print:text-[9px] font-black uppercase tracking-widest text-slate-600">
+                  <span className="text-2xl print:text-sm animate-bounce">🏫</span>
+                  <h2 className="text-xs print:text-[8.5px] font-black uppercase tracking-widest text-slate-600">
                     YAYASAN AMKUR FLORES • SDK SANTA THERESIA DANGA
                   </h2>
-                  <span className="text-2xl print:text-base animate-pulse">⭐</span>
+                  <span className="text-2xl print:text-sm animate-pulse">⭐</span>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl print:text-lg font-black text-blue-950 uppercase tracking-tight flex items-center justify-center gap-2">
+                <h1 className="text-2xl sm:text-3xl print:text-base font-black text-blue-950 uppercase tracking-tight flex items-center justify-center gap-2">
                   <span>ROSTER JADWAL PELAJARAN KELAS {selectedClass}</span>
                 </h1>
 
-                <p className="text-xs print:text-[9px] font-extrabold text-slate-700 uppercase">
+                <p className="text-xs print:text-[8.5px] font-extrabold text-slate-700 uppercase">
                   TAHUN PELAJARAN 2025/2026 • {theme.subTitle}
                 </p>
 
-                <div className="inline-block bg-amber-200/90 text-blue-950 px-4 py-1 print:px-2 print:py-0.5 rounded-full border border-amber-300 text-xs print:text-[9px] font-black shadow-sm">
+                <div className="inline-block bg-amber-200/90 text-blue-950 px-4 py-1 print:px-2 print:py-0.5 rounded-full border border-amber-300 text-xs print:text-[8.5px] font-black shadow-sm">
                   👩‍🏫 Wali Kelas: <span className="text-blue-900 underline font-black">{homeroomTeacher}</span>
                 </div>
               </div>
 
               {/* Right Cartoon Character Badge */}
-              <div className="hidden sm:flex flex-col items-center justify-center shrink-0">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 print:w-14 print:h-14 rounded-2xl print:rounded-xl overflow-hidden border-4 print:border-2 border-blue-400 shadow-md bg-white p-1 hover:scale-105 transition-transform duration-300 relative">
+              <div className="hidden sm:flex print:flex flex-col items-center justify-center shrink-0">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 print:w-12 print:h-12 rounded-2xl print:rounded-lg overflow-hidden border-4 print:border-2 border-blue-400 shadow-md bg-white p-1 hover:scale-105 transition-transform duration-300 relative">
                   <img
                     src={theme.cartoonImg}
                     alt="Kartun SD"
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover rounded-xl print:rounded-lg transform scale-x-[-1]"
+                    className="w-full h-full object-cover rounded-xl print:rounded-md transform scale-x-[-1]"
                   />
-                  <div className="absolute -top-2 -left-2 bg-blue-600 text-white p-1 rounded-full text-[10px] print:text-[8px] animate-pulse shadow">
+                  <div className="absolute -top-2 -left-2 bg-blue-600 text-white p-1 rounded-full text-[10px] print:text-[7px] animate-pulse shadow">
                     ⭐
                   </div>
                 </div>
-                <span className="text-[10px] print:text-[8px] font-black text-blue-950 bg-blue-100 px-2 py-0.5 rounded-full border border-blue-200 mt-1 uppercase text-center max-w-[130px] leading-tight">
+                <span className="text-[10px] print:text-[7.5px] font-black text-blue-950 bg-blue-100 px-2 py-0.5 rounded-full border border-blue-200 mt-1 uppercase text-center max-w-[130px] leading-tight">
                   Seragam Merah Putih
                 </span>
               </div>
@@ -408,14 +408,14 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
           </div>
 
           {/* Schedule Roster Table */}
-          <div className="overflow-x-auto rounded-2xl border-2 border-slate-800">
+          <div className="overflow-x-auto print:overflow-visible rounded-2xl print:rounded-xl border-2 border-slate-800">
             <table className="w-full border-collapse text-left text-xs font-bold">
               <thead>
-                <tr className={`${theme.tableHeaderBg} text-white uppercase text-[11px] font-black text-center border-b-2 border-slate-800`}>
-                  <th className="border-r border-slate-700/80 p-2.5 w-12">Jam</th>
-                  <th className="border-r border-slate-700/80 p-2.5 w-28">Waktu</th>
+                <tr className={`${theme.tableHeaderBg} text-white uppercase text-[11px] print:text-[9px] font-black text-center border-b-2 border-slate-800`}>
+                  <th className="border-r border-slate-700/80 p-2.5 print:p-1 w-10">Jam</th>
+                  <th className="border-r border-slate-700/80 p-2.5 print:p-1 w-24">Waktu</th>
                   {ALL_DAYS.map((day) => (
-                    <th key={day} className="border-r border-slate-700/80 p-2.5">
+                    <th key={day} className="border-r border-slate-700/80 p-2.5 print:p-1">
                       {day.toUpperCase()}
                     </th>
                   ))}
@@ -428,13 +428,13 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
                   if (isBreak) {
                     return (
                       <tr key={slot.id} className="bg-amber-100/90 text-amber-950 font-black text-center border-b-2 border-slate-800">
-                        <td className="border-r border-slate-800 p-2 text-[10px] uppercase font-mono bg-amber-200/80">
+                        <td className="border-r border-slate-800 p-2 print:p-0.5 text-[10px] print:text-[8px] uppercase font-mono bg-amber-200/80">
                           IST
                         </td>
-                        <td className="border-r border-slate-800 p-2 text-[11px] font-mono bg-amber-200/80">
+                        <td className="border-r border-slate-800 p-2 print:p-0.5 text-[11px] print:text-[8px] font-mono bg-amber-200/80 whitespace-nowrap">
                           {slot.startTime} - {slot.endTime}
                         </td>
-                        <td colSpan={6} className="p-2 uppercase text-xs tracking-wider bg-amber-200/90 font-black border-slate-800">
+                        <td colSpan={6} className="p-2 print:p-0.5 uppercase text-xs print:text-[8.5px] tracking-wider bg-amber-200/90 font-black border-slate-800">
                           🍿 ISTIRAHAT & MAKAN KUDAPAN SEHAT BERSAMA TEMAN 🍎
                         </td>
                       </tr>
@@ -443,42 +443,29 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
 
                   return (
                     <tr key={slot.id} className="border-b border-slate-800 hover:bg-slate-50 transition-colors">
-                      <td className="border-r border-slate-800 p-2 text-center font-black bg-slate-100 text-blue-950">
+                      <td className="border-r border-slate-800 p-2 print:p-0.5 text-center font-black text-xs print:text-[9px] bg-slate-100 text-blue-950">
                         {slot.id}
                       </td>
-                      <td className="border-r border-slate-800 p-2 text-center font-mono text-[11px] bg-slate-50/50">
+                      <td className="border-r border-slate-800 p-2 print:p-0.5 text-center font-mono text-[11px] print:text-[8px] bg-slate-50/50 whitespace-nowrap">
                         {slot.startTime} - {slot.endTime}
                       </td>
                       {ALL_DAYS.map((day) => {
                         const item = getItem(day, slot.id);
                         const subInfo = item ? SUBJECTS_MAP[item.subjectCode] : null;
 
-                        // Determine exact teacher name based on input in Settings/Form
-                        let teacherToShow = '-';
-                        if (item && subInfo) {
-                          const inputTeacherForSubject = subjectTeachersMap[item.subjectCode];
-                          if (inputTeacherForSubject && inputTeacherForSubject.trim().length > 0) {
-                            teacherToShow = inputTeacherForSubject;
-                          } else if (item.teacherName && item.teacherName.trim().length > 0) {
-                            teacherToShow = item.teacherName;
-                          } else {
-                            teacherToShow = subInfo.teacherDefault;
-                          }
-                        }
-
                         return (
                           <td key={day} className="border-r border-slate-800 p-1.5 print:p-0.5 align-middle bg-white text-center">
                             {item && subInfo ? (
                               <div className="flex flex-col items-center justify-center space-y-0.5 my-auto">
-                                <p className="font-black text-blue-950 text-xs print:text-[9px] leading-tight">
+                                <p className="font-black text-blue-950 text-xs print:text-[8.5px] leading-tight">
                                   {subInfo.fullName}
                                 </p>
-                                <span className="text-[10px] print:text-[8px] select-none">
+                                <span className="text-[10px] print:text-[7.5px] select-none text-slate-500 font-bold">
                                   📚
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-slate-300 text-[10px] italic">-</span>
+                              <span className="text-slate-300 text-[10px] print:text-[8px] italic">-</span>
                             )}
                           </td>
                         );
@@ -491,32 +478,32 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
           </div>
 
           {/* Bottom Motivation Banner - Proud Student Achievement Banner */}
-          <div className={`p-3.5 print:p-1.5 rounded-2xl border-2 ${theme.borderStyle} ${theme.headerBg} flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-black text-blue-950 shadow-sm relative overflow-hidden`}>
+          <div className={`p-3.5 print:p-1.5 rounded-2xl border-2 ${theme.borderStyle} ${theme.headerBg} flex flex-col sm:flex-row print:flex-row items-center justify-between gap-3 print:gap-2 text-xs font-black text-blue-950 shadow-sm relative overflow-hidden`}>
             {/* Left: Cartoon Student Mascot Avatar & Pride Badge */}
             <div className="flex items-center gap-3 print:gap-2">
-              <div className="w-12 h-12 print:w-8 print:h-8 rounded-xl overflow-hidden border-2 border-amber-400 bg-white shrink-0 shadow-sm relative">
+              <div className="w-12 h-12 print:w-7 print:h-7 rounded-xl print:rounded-lg overflow-hidden border-2 border-amber-400 bg-white shrink-0 shadow-sm relative">
                 <img
                   src={theme.cartoonImg}
                   alt="Kartun Kebanggaan Siswa"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute -bottom-1 -right-1 bg-amber-400 text-blue-950 text-[9px] print:text-[7px] p-0.5 rounded-full font-black">
+                <span className="absolute -bottom-1 -right-1 bg-amber-400 text-blue-950 text-[9px] print:text-[6.5px] p-0.5 rounded-full font-black">
                   ⭐
                 </span>
               </div>
 
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[10px] print:text-[8px] font-black uppercase px-2.5 py-0.5 print:px-1.5 print:py-0 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-blue-950 border border-yellow-300 shadow-sm flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 print:w-2.5 print:h-2.5 text-blue-950 animate-spin" />
+                  <span className="text-[10px] print:text-[7.5px] font-black uppercase px-2.5 py-0.5 print:px-1.5 print:py-0 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-blue-950 border border-yellow-300 shadow-sm flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 print:w-2 print:h-2 text-blue-950 animate-spin" />
                     AKU BANGGA SISWA KELAS {selectedClass}!
                   </span>
-                  <span className="text-[10px] print:text-[8px] font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
+                  <span className="text-[10px] print:text-[7.5px] font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
                     TAPEL 2025/2026
                   </span>
                 </div>
-                <p className="text-xs print:text-[9px] font-black text-blue-950 flex items-center gap-1">
+                <p className="text-xs print:text-[8.5px] font-black text-blue-950 flex items-center gap-1">
                   <span>{theme.accentIcon}</span>
                   <span>{theme.motto}</span>
                 </p>
@@ -530,33 +517,33 @@ export const PrintRosterModal: React.FC<PrintRosterModalProps> = ({
                 <span>⭐</span>
                 <span>🥇</span>
               </div>
-              <span className="text-[11px] print:text-[8px] font-black uppercase bg-blue-950 text-white px-3 py-1 print:px-2 print:py-0.5 rounded-xl shadow border border-blue-800 tracking-wide flex items-center gap-1">
+              <span className="text-[11px] print:text-[7.5px] font-black uppercase bg-blue-950 text-white px-3 py-1 print:px-2 print:py-0.5 rounded-xl shadow border border-blue-800 tracking-wide flex items-center gap-1">
                 <span>🏫 SDK ST. TERESIA DANGA</span>
               </span>
             </div>
           </div>
 
           {/* Printable Footer Signatures */}
-          <div className="pt-4 print:pt-2 grid grid-cols-2 text-center text-xs print:text-[10px] font-bold gap-8 print:gap-4">
-            <div className="space-y-12 print:space-y-5">
+          <div className="pt-4 print:pt-1.5 grid grid-cols-2 text-center text-xs print:text-[9px] font-bold gap-8 print:gap-4">
+            <div className="space-y-12 print:space-y-4">
               <div>
                 <p>Mengetahui,</p>
-                <p className="font-black uppercase text-blue-950">Kepala SDK St. Teresia Danga</p>
+                <p className="font-black uppercase text-blue-950">KEPALA SDK ST. TERESIA DANGA</p>
               </div>
-              <div className="pt-4 print:pt-2">
-                <p className="font-black underline uppercase text-blue-950">Sr. Yustina S.SpS, S.Pd</p>
-                <p className="text-[10px] print:text-[8px] text-slate-600 font-bold">NIP. 19780212 200501 2 003</p>
+              <div className="pt-4 print:pt-1">
+                <p className="font-black underline uppercase text-blue-950">SR. YUSTINA S.SPS, S.PD</p>
+                <p className="text-[10px] print:text-[7.5px] text-slate-600 font-bold">NIP. 19780212 200501 2 003</p>
               </div>
             </div>
 
-            <div className="space-y-12 print:space-y-5">
+            <div className="space-y-12 print:space-y-4">
               <div>
                 <p>Mbay, ................................ 2026</p>
-                <p className="font-black uppercase text-blue-950">Wali Kelas {selectedClass}</p>
+                <p className="font-black uppercase text-blue-950">WALI KELAS {selectedClass}</p>
               </div>
-              <div className="pt-4 print:pt-2">
+              <div className="pt-4 print:pt-1">
                 <p className="font-black underline uppercase text-blue-950">{homeroomTeacher}</p>
-                <p className="text-[10px] print:text-[8px] text-slate-600 font-bold">Guru Wali Kelas {selectedClass}</p>
+                <p className="text-[10px] print:text-[7.5px] text-slate-600 font-bold">Guru Wali Kelas {selectedClass}</p>
               </div>
             </div>
           </div>
