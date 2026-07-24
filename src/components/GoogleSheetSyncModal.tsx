@@ -81,9 +81,20 @@ export const GoogleSheetSyncModal: React.FC<GoogleSheetSyncModalProps> = ({
       }
     } catch (err: any) {
       console.error(err);
+      let errorMsg = err.message || 'Gagal masuk dengan akun Google. Silakan coba lagi.';
+      if (err.code === 'auth/unauthorized-domain' || (errorMsg && errorMsg.includes('unauthorized-domain'))) {
+        const currentDomain = window.location.hostname;
+        errorMsg = `Domain "${currentDomain}" belum didaftarkan di Firebase Console!
+
+Langkah Mudah Mengatasi (Hanya 1 Menit):
+1. Buka Firebase Console project Anda: https://console.firebase.google.com/u/0/project/roster-822a7/authentication/settings
+2. Klik tab 'Settings' -> pilih 'Authorized domains' (Domain yang diizinkan)
+3. Klik 'Add domain' lalu masukkan domain aplikasi Anda: ${currentDomain} (dan domain publik Anda seperti roster.lionel-djogo.workers.dev jika ada).
+4. Pastikan metode 'Google' juga sudah diaktifkan di menu 'Sign-in method'.`;
+      }
       setStatusMessage({
         type: 'error',
-        text: err.message || 'Gagal masuk dengan akun Google. Silakan coba lagi.',
+        text: errorMsg,
       });
     } finally {
       setIsLoading(false);
@@ -448,7 +459,7 @@ export const GoogleSheetSyncModal: React.FC<GoogleSheetSyncModalProps> = ({
               <p className="font-black uppercase">
                 {statusMessage.type === 'success' ? 'Berhasil!' : 'Terjadi Kendala:'}
               </p>
-              <p>{statusMessage.text}</p>
+              <p className="whitespace-pre-line leading-relaxed">{statusMessage.text}</p>
             </div>
           </div>
         )}
