@@ -344,18 +344,20 @@ export const Header: React.FC<HeaderProps> = ({
             JADWAL KELAS {selectedClass}
           </button>
 
-          {/* Standalone Tambah & Data Murid Tab */}
-          <button
-            onClick={() => handleTabClick('students')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
-              activeTab === 'students'
-                ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
-                : 'bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 border-2 border-amber-400/40'
-            }`}
-          >
-            <Users className="w-4 h-4 text-amber-300" />
-            📋 TAMBAH & DATA MURID
-          </button>
+          {/* Standalone Tambah & Data Murid Tab (Guru Only) */}
+          {userRole === 'teacher' && (
+            <button
+              onClick={() => handleTabClick('students')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap shrink-0 ${
+                activeTab === 'students'
+                  ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300 scale-[1.02]'
+                  : 'bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 border-2 border-amber-400/40'
+              }`}
+            >
+              <Users className="w-4 h-4 text-amber-300" />
+              📋 TAMBAH & DATA MURID
+            </button>
+          )}
 
           <button
             onClick={() => handleTabClick('parent_portal')}
@@ -524,20 +526,22 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            <button
-              onClick={() => handleTabClick('students')}
-              className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
-                activeTab === 'students'
-                  ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300'
-                  : 'bg-blue-700 text-white hover:bg-blue-600 border border-blue-500'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <Users className="w-4 h-4 text-amber-300" />
-                <span>📋 DATA & KELOLA MURID</span>
-              </div>
-              <ChevronRight className="w-4 h-4 opacity-70" />
-            </button>
+            {userRole === 'teacher' && (
+              <button
+                onClick={() => handleTabClick('students')}
+                className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-black uppercase transition-all ${
+                  activeTab === 'students'
+                    ? 'bg-yellow-400 text-blue-950 shadow-[3px_3px_0px_#1e3a8a] border-2 border-yellow-300'
+                    : 'bg-blue-700 text-white hover:bg-blue-600 border border-blue-500'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Users className="w-4 h-4 text-amber-300" />
+                  <span>📋 DATA & KELOLA MURID</span>
+                </div>
+                <ChevronRight className="w-4 h-4 opacity-70" />
+              </button>
+            )}
 
             <button
               onClick={() => handleTabClick('class')}

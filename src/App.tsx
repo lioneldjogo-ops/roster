@@ -328,8 +328,10 @@ export default function App() {
   const handleSelectRole = (role: UserRole) => {
     setUserRole(role);
     if (role === 'parent') {
-      setActiveTab('parent_portal');
-    } else if (role === 'student' && (activeTab === 'parent_portal' || activeTab === 'teacher_reports')) {
+      if (activeTab === 'students' || activeTab === 'manage' || activeTab === 'teacher_reports') {
+        setActiveTab('parent_portal');
+      }
+    } else if (role === 'student' && (activeTab === 'parent_portal' || activeTab === 'teacher_reports' || activeTab === 'students' || activeTab === 'manage')) {
       setActiveTab('class');
     }
   };
@@ -343,7 +345,7 @@ export default function App() {
   const handleLogoutTeacher = () => {
     setIsTeacherAuthenticated(false);
     setUserRole('student');
-    if (activeTab === 'manage' || activeTab === 'teacher_reports') {
+    if (activeTab === 'manage' || activeTab === 'teacher_reports' || activeTab === 'students') {
       setActiveTab('class');
     }
   };
@@ -572,15 +574,35 @@ export default function App() {
           )}
 
           {activeTab === 'students' && (
-            <StudentManagementView
-              students={students}
-              selectedClass={selectedClass}
-              onSelectClass={setSelectedClass}
-              onAddStudent={handleAddStudent}
-              onDeleteStudent={handleDeleteStudent}
-              onSaveClassRoster={handleSaveClassRoster}
-              onOpenPrintRoster={() => setIsPrintRosterModalOpen(true)}
-            />
+            userRole === 'teacher' ? (
+              <StudentManagementView
+                students={students}
+                selectedClass={selectedClass}
+                onSelectClass={setSelectedClass}
+                onAddStudent={handleAddStudent}
+                onDeleteStudent={handleDeleteStudent}
+                onSaveClassRoster={handleSaveClassRoster}
+                onOpenPrintRoster={() => setIsPrintRosterModalOpen(true)}
+              />
+            ) : (
+              <div className="bg-amber-50 border-4 border-amber-400 rounded-3xl p-8 text-center space-y-4 my-8">
+                <div className="w-16 h-16 bg-amber-400 text-blue-950 rounded-2xl flex items-center justify-center font-black mx-auto text-2xl shadow-md">
+                  🔒
+                </div>
+                <h2 className="text-xl font-black text-blue-950 uppercase">
+                  Akses Terbatas: Menu Tambah & Data Murid Khusus Guru
+                </h2>
+                <p className="text-sm font-bold text-slate-700 max-w-md mx-auto">
+                  Menu pendaftaran dan pengelola data murid hanya dapat diakses melalui mode Sisi Guru & Sekolah.
+                </p>
+                <button
+                  onClick={() => setIsPinModalOpen(true)}
+                  className="bg-amber-400 hover:bg-amber-300 text-blue-950 font-black text-xs px-6 py-3 rounded-2xl border-2 border-amber-300 shadow-[3px_3px_0px_#1e3a8a] uppercase"
+                >
+                  Masuk Ke Sisi Guru & Sekolah
+                </button>
+              </div>
+            )
           )}
 
           {activeTab === 'parent_portal' && (
