@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Jadwal Pelajaran SDK Santa Theresia",
+  "description": "Aplikasi Jadwal Pelajaran dan Notifikasi Pengingat Kelas untuk Siswa SDK St. Teresia Danga - Mbay",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
