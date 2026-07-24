@@ -143,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Role 1: Sisi Murid */}
             <button
               onClick={() => handleRoleClick('student')}
-              className={`flex items-center justify-center gap-1 px-1.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase transition-all text-center ${
+              className={`flex items-center justify-center gap-1 px-1 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[9.5px] sm:text-xs font-black uppercase transition-all text-center ${
                 userRole === 'student'
                   ? 'bg-yellow-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-300'
                   : 'bg-blue-800 hover:bg-blue-700 text-blue-100 border border-blue-700'
@@ -156,7 +156,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Role 2: Sisi Orang Tua */}
             <button
               onClick={() => handleRoleClick('parent')}
-              className={`flex items-center justify-center gap-1 px-1.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase transition-all text-center ${
+              className={`flex items-center justify-center gap-1 px-1 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[9.5px] sm:text-xs font-black uppercase transition-all text-center ${
                 userRole === 'parent'
                   ? 'bg-emerald-400 text-blue-950 shadow-[2px_2px_0px_#14532d] border-2 border-emerald-300'
                   : 'bg-blue-800 hover:bg-blue-700 text-blue-100 border border-blue-700'
@@ -169,7 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Role 3: Sisi Sekolah / Guru */}
             <button
               onClick={() => handleRoleClick('teacher')}
-              className={`flex items-center justify-center gap-1 px-1.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase transition-all text-center ${
+              className={`flex items-center justify-center gap-1 px-1 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[9.5px] sm:text-xs font-black uppercase transition-all text-center ${
                 userRole === 'teacher'
                   ? 'bg-amber-400 text-blue-950 shadow-[2px_2px_0px_#1e3a8a] border-2 border-amber-500'
                   : 'bg-blue-800 hover:bg-blue-700 text-yellow-300 border border-blue-700'
@@ -180,7 +180,7 @@ export const Header: React.FC<HeaderProps> = ({
               ) : (
                 <Lock className="w-3.5 h-3.5 text-amber-300 shrink-0" />
               )}
-              <span className="truncate">GURU</span>
+              <span className="truncate">GURU & SEKOLAH</span>
               {isTeacherAuthenticated && (
                 <span className="bg-green-700 text-white text-[8px] sm:text-[9px] px-1 py-0.2 rounded-full font-black shrink-0 hidden sm:inline">
                   OK
@@ -440,7 +440,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center justify-between gap-1.5 shrink-0">
               <span className="text-[10px] font-black uppercase bg-amber-400 text-blue-950 px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-sm shrink-0 whitespace-nowrap">
                 <Sparkles className="w-3.5 h-3.5 text-amber-900 shrink-0" />
-                MENU AKSES GURU:
+                MENU AKSES GURU & SEKOLAH:
               </span>
             </div>
 
